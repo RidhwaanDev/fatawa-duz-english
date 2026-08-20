@@ -1,0 +1,134 @@
+{
+  "contents": {
+    "volume": 6,
+    "total": 312,
+    "chapters": [
+      {
+        "title": "Uncategorized",
+        "count": 36,
+        "firstId": 2287,
+        "lastId": 2322,
+        "pageStart": null,
+        "pageEnd": null,
+        "sections": [
+          {
+            "title": "گروی رکھنے کے احکام کا بیان",
+            "count": 9,
+            "firstId": 2287,
+            "lastId": 2295,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "غصب کے احکام کا بیان",
+            "count": 13,
+            "firstId": 2296,
+            "lastId": 2308,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "احکامِ لقطہ کا بیان",
+            "count": 9,
+            "firstId": 2309,
+            "lastId": 2317,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "مزارعت اور مساقات کے احکام کا بیان",
+            "count": 5,
+            "firstId": 2318,
+            "lastId": 2322,
+            "pageStart": null,
+            "pageEnd": null
+          }
+        ]
+      },
+      {
+        "title": "كتاب الصيد والذبائح",
+        "count": 166,
+        "firstId": 2323,
+        "lastId": 2488,
+        "pageStart": null,
+        "pageEnd": null,
+        "sections": [
+          {
+            "title": "باب (۱): ذبح کرنے کے احکام کا بیان",
+            "count": 29,
+            "firstId": 2323,
+            "lastId": 2351,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "\"إبراز الدقائق في حكم صيد البنادق\"",
+            "count": 3,
+            "firstId": 2352,
+            "lastId": 2354,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۲): ماکول اللحم اور غیر ماکول اللحم جانوروں کے احکام",
+            "count": 32,
+            "firstId": 2355,
+            "lastId": 2386,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۳): أحكام الأضحية",
+            "count": 84,
+            "firstId": 2387,
+            "lastId": 2470,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۴): أحكام العقيقة",
+            "count": 18,
+            "firstId": 2471,
+            "lastId": 2488,
+            "pageStart": null,
+            "pageEnd": null
+          }
+        ]
+      },
+      {
+        "title": "كتاب الحظر والإباحة",
+        "count": 110,
+        "firstId": 2489,
+        "lastId": 2598,
+        "pageStart": null,
+        "pageEnd": null,
+        "sections": [
+          {
+            "title": "باب (۱): أحكام الأكل والشرب",
+            "count": 50,
+            "firstId": 2489,
+            "lastId": 2538,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۲): ضیافت و مہمانی کے آداب و احکام کا بیان",
+            "count": 17,
+            "firstId": 2539,
+            "lastId": 2555,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۳): أحكام التداوي",
+            "count": 43,
+            "firstId": 2556,
+            "lastId": 2598,
+            "pageStart": null,
+            "pageEnd": null
+          }
+        ]
+      }
+    ]
+  }
+}

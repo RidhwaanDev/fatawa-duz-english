@@ -1,0 +1,19 @@
+# dependencies
+node_modules/
+
+# test + audit artefacts
+.shots/
+test-results/
+playwright-report/
+blob-report/
+.playwright/
+
+# logs
+data/*.log
+*.log
+
+# os
+.DS_Store
+
+# netlify
+.netlify/

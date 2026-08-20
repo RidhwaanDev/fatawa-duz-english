@@ -1,0 +1,310 @@
+{
+  "contents": {
+    "volume": 3,
+    "total": 560,
+    "chapters": [
+      {
+        "title": "Uncategorized",
+        "count": 30,
+        "firstId": 898,
+        "lastId": 927,
+        "pageStart": null,
+        "pageEnd": null,
+        "sections": [
+          {
+            "title": "باب (۱۹): احکام الجنائز",
+            "count": 30,
+            "firstId": 898,
+            "lastId": 927,
+            "pageStart": null,
+            "pageEnd": null
+          }
+        ]
+      },
+      {
+        "title": "كتاب الزكاة",
+        "count": 132,
+        "firstId": 928,
+        "lastId": 1059,
+        "pageStart": null,
+        "pageEnd": null,
+        "sections": [
+          {
+            "title": "باب… (۱): وجوبِ زکوٰۃ کا بیان",
+            "count": 57,
+            "firstId": 928,
+            "lastId": 984,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب… (۲):عشر اور خراج کا بیان",
+            "count": 9,
+            "firstId": 985,
+            "lastId": 993,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب… (۳): زکوٰۃ ادا کرنے کا بیان",
+            "count": 31,
+            "firstId": 994,
+            "lastId": 1024,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (٤): مصارفِ زكوة كا بيان",
+            "count": 29,
+            "firstId": 1025,
+            "lastId": 1053,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "با ب (۵): صدقة الفطر کا بیان",
+            "count": 6,
+            "firstId": 1054,
+            "lastId": 1059,
+            "pageStart": null,
+            "pageEnd": null
+          }
+        ]
+      },
+      {
+        "title": "كتاب الصوم",
+        "count": 78,
+        "firstId": 1060,
+        "lastId": 1137,
+        "pageStart": null,
+        "pageEnd": null,
+        "sections": [
+          {
+            "title": "باب (۱): رؤیتِ ہلال اور اختلافِ مطالع كا بيان",
+            "count": 15,
+            "firstId": 1060,
+            "lastId": 1074,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب(۲):احکامِ نیت کا بیان",
+            "count": 4,
+            "firstId": 1075,
+            "lastId": 1078,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۳): روزہ کے مفسدات و مکروہات کا بیان",
+            "count": 27,
+            "firstId": 1079,
+            "lastId": 1105,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (٤): قضا اور کفارہ کا بیان",
+            "count": 7,
+            "firstId": 1106,
+            "lastId": 1112,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۵): نفل روزوں کا بیان",
+            "count": 11,
+            "firstId": 1113,
+            "lastId": 1123,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب(٦): اعتکاف کا بیان",
+            "count": 9,
+            "firstId": 1124,
+            "lastId": 1132,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۷): متفرقات الصوم",
+            "count": 5,
+            "firstId": 1133,
+            "lastId": 1137,
+            "pageStart": null,
+            "pageEnd": null
+          }
+        ]
+      },
+      {
+        "title": "كتاب الحج",
+        "count": 115,
+        "firstId": 1138,
+        "lastId": 1252,
+        "pageStart": null,
+        "pageEnd": null,
+        "sections": [
+          {
+            "title": "باب (۱): حج کی فرضیت، شرائط، ارکان وغیرہ کا بیان",
+            "count": 44,
+            "firstId": 1138,
+            "lastId": 1181,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۲): بغیر احرام کے میقات تجاوز کرنے کا بیان",
+            "count": 7,
+            "firstId": 1182,
+            "lastId": 1188,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۳): قران، تمتع اور افراد کا بیان",
+            "count": 10,
+            "firstId": 1189,
+            "lastId": 1198,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (٤): عمرہ کا بیان",
+            "count": 5,
+            "firstId": 1199,
+            "lastId": 1203,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۵): حجِ بدل کا بیان",
+            "count": 6,
+            "firstId": 1204,
+            "lastId": 1209,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (٦): جنایات کا بیان",
+            "count": 19,
+            "firstId": 1210,
+            "lastId": 1228,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۷): حرمین شریفین کے احکام کا بیان",
+            "count": 24,
+            "firstId": 1229,
+            "lastId": 1252,
+            "pageStart": null,
+            "pageEnd": null
+          }
+        ]
+      },
+      {
+        "title": "كتاب النكاح",
+        "count": 96,
+        "firstId": 1253,
+        "lastId": 1348,
+        "pageStart": null,
+        "pageEnd": null,
+        "sections": [
+          {
+            "title": "باب (۱): منگنی اور خطبہ نکاح کا بیان",
+            "count": 13,
+            "firstId": 1253,
+            "lastId": 1265,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۲): فیما ینعقد بہ النکاح و ما لا ینعقد",
+            "count": 45,
+            "firstId": 1266,
+            "lastId": 1310,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۳): فی الأولیاء و الأکفاء",
+            "count": 9,
+            "firstId": 1311,
+            "lastId": 1319,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۴): مہر کا بیان",
+            "count": 6,
+            "firstId": 1320,
+            "lastId": 1325,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۵): ولیمہ کا بیان",
+            "count": 5,
+            "firstId": 1326,
+            "lastId": 1330,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (٦): نکاح کے متفرق مسائل",
+            "count": 18,
+            "firstId": 1331,
+            "lastId": 1348,
+            "pageStart": null,
+            "pageEnd": null
+          }
+        ]
+      },
+      {
+        "title": "زكوة، صوم، حج اور نكاح سے متعلق متفرق مسائل:",
+        "count": 24,
+        "firstId": 1349,
+        "lastId": 1372,
+        "pageStart": null,
+        "pageEnd": null,
+        "sections": [
+          {
+            "title": "باب (٦): نکاح کے متفرق مسائل",
+            "count": 24,
+            "firstId": 1349,
+            "lastId": 1372,
+            "pageStart": null,
+            "pageEnd": null
+          }
+        ]
+      },
+      {
+        "title": "ابواب الصوم سے متعلق متفرق مسائل:",
+        "count": 85,
+        "firstId": 1373,
+        "lastId": 1457,
+        "pageStart": null,
+        "pageEnd": null,
+        "sections": [
+          {
+            "title": "باب (٦): نکاح کے متفرق مسائل",
+            "count": 74,
+            "firstId": 1373,
+            "lastId": 1446,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "ابواب النکاح سے متعلق متفرق مسائل؛",
+            "count": 11,
+            "firstId": 1447,
+            "lastId": 1457,
+            "pageStart": null,
+            "pageEnd": null
+          }
+        ]
+      }
+    ]
+  }
+}

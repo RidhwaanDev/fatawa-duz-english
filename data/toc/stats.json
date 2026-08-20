@@ -1,0 +1,181 @@
+{
+  "stats": {
+    "total": 3742,
+    "embedded": 3742,
+    "volumes": [
+      {
+        "id": 1,
+        "count": 352
+      },
+      {
+        "id": 2,
+        "count": 545
+      },
+      {
+        "id": 3,
+        "count": 560
+      },
+      {
+        "id": 4,
+        "count": 407
+      },
+      {
+        "id": 5,
+        "count": 422
+      },
+      {
+        "id": 6,
+        "count": 312
+      },
+      {
+        "id": 7,
+        "count": 330
+      },
+      {
+        "id": 8,
+        "count": 341
+      },
+      {
+        "id": 9,
+        "count": 473
+      }
+    ],
+    "topics": [
+      {
+        "title": "Uncategorized",
+        "volume": 3,
+        "count": 1165
+      },
+      {
+        "title": "كتاب الصلاة",
+        "volume": 2,
+        "count": 545
+      },
+      {
+        "title": "كتاب البيوع",
+        "volume": 5,
+        "count": 260
+      },
+      {
+        "title": "كتاب الطلاق",
+        "volume": 4,
+        "count": 237
+      },
+      {
+        "title": "كتاب الصيد والذبائح",
+        "volume": 6,
+        "count": 166
+      },
+      {
+        "title": "كتاب الزكاة",
+        "volume": 3,
+        "count": 132
+      },
+      {
+        "title": "كتاب الطهارة",
+        "volume": 1,
+        "count": 130
+      },
+      {
+        "title": "كتاب الحج",
+        "volume": 3,
+        "count": 115
+      },
+      {
+        "title": "كتاب الحظر والإباحة",
+        "volume": 6,
+        "count": 110
+      },
+      {
+        "title": "كتاب النكاح",
+        "volume": 3,
+        "count": 96
+      },
+      {
+        "title": "كتاب الإيمان والعقائد",
+        "volume": 1,
+        "count": 95
+      },
+      {
+        "title": "ابواب الصوم سے متعلق متفرق مسائل:",
+        "volume": 3,
+        "count": 85
+      },
+      {
+        "title": "كتاب الحديث والآثار",
+        "volume": 1,
+        "count": 81
+      },
+      {
+        "title": "كتاب الصوم",
+        "volume": 3,
+        "count": 78
+      },
+      {
+        "title": "كتاب الوقف",
+        "volume": 4,
+        "count": 78
+      },
+      {
+        "title": "كتاب الإجارة",
+        "volume": 5,
+        "count": 63
+      },
+      {
+        "title": "كتاب الأيمان والنذور",
+        "volume": 4,
+        "count": 48
+      },
+      {
+        "title": "كتاب الفرائض",
+        "volume": 8,
+        "count": 45
+      },
+      {
+        "title": "كتاب المضاربة",
+        "volume": 5,
+        "count": 44
+      },
+      {
+        "title": "كتاب الحدود والقصاص",
+        "volume": 4,
+        "count": 44
+      },
+      {
+        "title": "كتاب الهبة",
+        "volume": 5,
+        "count": 38
+      },
+      {
+        "title": "زكوة، صوم، حج اور نكاح سے متعلق متفرق مسائل:",
+        "volume": 3,
+        "count": 24
+      },
+      {
+        "title": "كتاب السلوك والطريقة",
+        "volume": 1,
+        "count": 24
+      },
+      {
+        "title": "كتاب التفسير والتجويد",
+        "volume": 1,
+        "count": 20
+      },
+      {
+        "title": "كتاب الوكالة",
+        "volume": 5,
+        "count": 14
+      },
+      {
+        "title": "كتاب الشفعة",
+        "volume": 5,
+        "count": 3
+      },
+      {
+        "title": "أصول کے متفرق مسائل",
+        "volume": 1,
+        "count": 2
+      }
+    ]
+  }
+}

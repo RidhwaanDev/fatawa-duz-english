@@ -1,0 +1,76 @@
+{
+  "contents": {
+    "volume": 8,
+    "total": 341,
+    "chapters": [
+      {
+        "title": "Uncategorized",
+        "count": 296,
+        "firstId": 2929,
+        "lastId": 3224,
+        "pageStart": null,
+        "pageEnd": null,
+        "sections": [
+          {
+            "title": "باب (۱)ــــ: عملیات اور سحر سے متعلق احکام کا بیان",
+            "count": 35,
+            "firstId": 2929,
+            "lastId": 2963,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۱۱): حیوانات سے متعلق احکام کا بیان",
+            "count": 24,
+            "firstId": 2964,
+            "lastId": 2987,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۱۲): امورِ سیاست اور قضا سے متعلق احکام کا بیان",
+            "count": 21,
+            "firstId": 2988,
+            "lastId": 3008,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۱۳): حظر و اباحت سے متعلق متفرق مسائل کا بیان",
+            "count": 216,
+            "firstId": 3009,
+            "lastId": 3224,
+            "pageStart": null,
+            "pageEnd": null
+          }
+        ]
+      },
+      {
+        "title": "كتاب الفرائض",
+        "count": 45,
+        "firstId": 3225,
+        "lastId": 3269,
+        "pageStart": null,
+        "pageEnd": null,
+        "sections": [
+          {
+            "title": "باب اول: وصیت سے متعلق احکام کا بیان",
+            "count": 18,
+            "firstId": 3225,
+            "lastId": 3242,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "بابِ دوم: میراث سے متعلق احکام کا بیان",
+            "count": 27,
+            "firstId": 3243,
+            "lastId": 3269,
+            "pageStart": null,
+            "pageEnd": null
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,212 @@
+{
+  "contents": {
+    "volume": 5,
+    "total": 422,
+    "chapters": [
+      {
+        "title": "كتاب البيوع",
+        "count": 260,
+        "firstId": 1865,
+        "lastId": 2124,
+        "pageStart": null,
+        "pageEnd": null,
+        "sections": [
+          {
+            "title": "باب (۱، ۲، ۳): جائز اور ناجائز خرید و فروخت کے احکام",
+            "count": 107,
+            "firstId": 1865,
+            "lastId": 1971,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (٤): مرابحه اور بينك سے متعلق احكام كا بيان",
+            "count": 7,
+            "firstId": 1972,
+            "lastId": 1978,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۵): بیع سلم اور استصناع کا بیان",
+            "count": 6,
+            "firstId": 1979,
+            "lastId": 1984,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب ( ٦): بیع کی مختلف قسموں کا بیان",
+            "count": 7,
+            "firstId": 1985,
+            "lastId": 1991,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۷): بیع الحقوق کا بیان",
+            "count": 9,
+            "firstId": 1992,
+            "lastId": 2000,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۸): بیع صرف کا بیان",
+            "count": 14,
+            "firstId": 2001,
+            "lastId": 2014,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب: سود کے احکام کا بیان",
+            "count": 18,
+            "firstId": 2015,
+            "lastId": 2032,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "مختلف کارڈ کے احکام کا بیان",
+            "count": 2,
+            "firstId": 2033,
+            "lastId": 2034,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "بابِ: سودی مصارف کا بیان",
+            "count": 39,
+            "firstId": 2035,
+            "lastId": 2073,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب: جوا اور رشوت کے احکام",
+            "count": 13,
+            "firstId": 2074,
+            "lastId": 2086,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب: قرض اور دیون کے احکام",
+            "count": 27,
+            "firstId": 2087,
+            "lastId": 2113,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "عاریت اور امانت کے احکام",
+            "count": 11,
+            "firstId": 2114,
+            "lastId": 2124,
+            "pageStart": null,
+            "pageEnd": null
+          }
+        ]
+      },
+      {
+        "title": "كتاب الهبة",
+        "count": 38,
+        "firstId": 2125,
+        "lastId": 2162,
+        "pageStart": null,
+        "pageEnd": null,
+        "sections": [
+          {
+            "title": "عاریت اور امانت کے احکام",
+            "count": 38,
+            "firstId": 2125,
+            "lastId": 2162,
+            "pageStart": null,
+            "pageEnd": null
+          }
+        ]
+      },
+      {
+        "title": "كتاب الإجارة",
+        "count": 63,
+        "firstId": 2163,
+        "lastId": 2225,
+        "pageStart": null,
+        "pageEnd": null,
+        "sections": [
+          {
+            "title": "کرایہ داری کے مسائل کا بیان",
+            "count": 63,
+            "firstId": 2163,
+            "lastId": 2225,
+            "pageStart": null,
+            "pageEnd": null
+          }
+        ]
+      },
+      {
+        "title": "كتاب الوكالة",
+        "count": 14,
+        "firstId": 2226,
+        "lastId": 2239,
+        "pageStart": null,
+        "pageEnd": null,
+        "sections": [
+          {
+            "title": "وکالت کے احکام کا بیان",
+            "count": 14,
+            "firstId": 2226,
+            "lastId": 2239,
+            "pageStart": null,
+            "pageEnd": null
+          }
+        ]
+      },
+      {
+        "title": "كتاب المضاربة",
+        "count": 44,
+        "firstId": 2240,
+        "lastId": 2283,
+        "pageStart": null,
+        "pageEnd": null,
+        "sections": [
+          {
+            "title": "مضاربت کے احکام کا بیان",
+            "count": 25,
+            "firstId": 2240,
+            "lastId": 2264,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "شرکت سے متعلق احکام کا بیان",
+            "count": 19,
+            "firstId": 2265,
+            "lastId": 2283,
+            "pageStart": null,
+            "pageEnd": null
+          }
+        ]
+      },
+      {
+        "title": "كتاب الشفعة",
+        "count": 3,
+        "firstId": 2284,
+        "lastId": 2286,
+        "pageStart": null,
+        "pageEnd": null,
+        "sections": [
+          {
+            "title": "حق شفعہ کے احکام کا بیان",
+            "count": 3,
+            "firstId": 2284,
+            "lastId": 2286,
+            "pageStart": null,
+            "pageEnd": null
+          }
+        ]
+      }
+    ]
+  }
+}

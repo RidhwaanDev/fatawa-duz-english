@@ -1,0 +1,66 @@
+{
+  "contents": {
+    "volume": 7,
+    "total": 330,
+    "chapters": [
+      {
+        "title": "Uncategorized",
+        "count": 330,
+        "firstId": 2599,
+        "lastId": 2928,
+        "pageStart": null,
+        "pageEnd": null,
+        "sections": [
+          {
+            "title": "باب (٤): احکام اللباس",
+            "count": 96,
+            "firstId": 2599,
+            "lastId": 2694,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۵): ما يتعلق بأحکام الشعور والختان والخضاب و تقلیم الأظفار",
+            "count": 65,
+            "firstId": 2695,
+            "lastId": 2759,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (٦): سلام، تقبیل، مصافحہ اور معانقہ کے احکام",
+            "count": 23,
+            "firstId": 2760,
+            "lastId": 2782,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۷): نام اور القاب سے متعلق احکام کا بیان",
+            "count": 54,
+            "firstId": 2783,
+            "lastId": 2836,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۸): ما يتعلق بأحكام الألعاب و اللهو واللعب",
+            "count": 39,
+            "firstId": 2837,
+            "lastId": 2875,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۹): ما يتعلق بالقرآن الكريم و الذكر و التلاوة و الأشياء المقدسة",
+            "count": 53,
+            "firstId": 2876,
+            "lastId": 2928,
+            "pageStart": null,
+            "pageEnd": null
+          }
+        ]
+      }
+    ]
+  }
+}

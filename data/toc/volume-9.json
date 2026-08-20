@@ -1,0 +1,58 @@
+{
+  "contents": {
+    "volume": 9,
+    "total": 473,
+    "chapters": [
+      {
+        "title": "Uncategorized",
+        "count": 473,
+        "firstId": 3270,
+        "lastId": 3742,
+        "pageStart": null,
+        "pageEnd": null,
+        "sections": [
+          {
+            "title": "باب… )۱( طہارت سے متعلق متفرق مسائل",
+            "count": 35,
+            "firstId": 3270,
+            "lastId": 3304,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب… )۲( نماز سے متعلق متفرق مسائل",
+            "count": 277,
+            "firstId": 3305,
+            "lastId": 3581,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب… )۸( نکاح و طلاق سے متعلق متفرق مسائل",
+            "count": 60,
+            "firstId": 3582,
+            "lastId": 3641,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب… )۹( وقف سے متعلق متفرق مسائل:",
+            "count": 5,
+            "firstId": 3642,
+            "lastId": 3646,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب… )۱۰( تجارت سے متعلق متفرق مسائل کا بیان",
+            "count": 96,
+            "firstId": 3647,
+            "lastId": 3742,
+            "pageStart": null,
+            "pageEnd": null
+          }
+        ]
+      }
+    ]
+  }
+}

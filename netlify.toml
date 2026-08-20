@@ -1,0 +1,47 @@
+[build]
+  publish = "public"
+  command = ""
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Single-page app: every route is served by index.html.
+# Hash routing means this mainly guards against stray deep links.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Fingerprint-free assets: revalidate, but allow the CDN to serve instantly.
+[[headers]]
+  for = "/styles.css"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/app.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Fatwa records are immutable once published.
+[[headers]]
+  for = "/data/fatwa/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, stale-while-revalidate=86400"
+
+[[headers]]
+  for = "/data/index.json"
+  [headers.values]
+    Cache-Control = "public, max-age=300, stale-while-revalidate=3600"
+
+[[headers]]
+  for = "/data/meta.json"
+  [headers.values]
+    Cache-Control = "public, max-age=300, stale-while-revalidate=3600"

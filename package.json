@@ -1,0 +1,19 @@
+{
+  "name": "fatawa-duz-english",
+  "version": "1.0.0",
+  "private": true,
+  "description": "English edition of Fatawa Darul Uloom Zakariyya",
+  "scripts": {
+    "css": "@tailwindcss/cli -i ./src/input.css -o ./public/styles.css --minify",
+    "watch": "@tailwindcss/cli -i ./src/input.css -o ./public/styles.css --watch",
+    "data": "python3 scripts/build_site.py",
+    "build": "npm run data && npm run css",
+    "serve": "python3 -m http.server 4173 --directory public"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "@tailwindcss/cli": "^4.1.11",
+    "netlify-cli": "^27.1.1",
+    "tailwindcss": "^4.1.11"
+  }
+}

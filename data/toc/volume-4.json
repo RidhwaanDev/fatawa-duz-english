@@ -1,0 +1,256 @@
+{
+  "contents": {
+    "volume": 4,
+    "total": 407,
+    "chapters": [
+      {
+        "title": "كتاب الطلاق",
+        "count": 237,
+        "firstId": 1458,
+        "lastId": 1694,
+        "pageStart": null,
+        "pageEnd": null,
+        "sections": [
+          {
+            "title": "باب (۱): طلاق واقع ہونے نہ ہونے کا بیان",
+            "count": 18,
+            "firstId": 1458,
+            "lastId": 1475,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۲): صریح الفاظ سے طلاق دینے کا بیان",
+            "count": 10,
+            "firstId": 1476,
+            "lastId": 1485,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۳): طلاقِ ثلاثہ کا بیان",
+            "count": 15,
+            "firstId": 1486,
+            "lastId": 1500,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (٤): کنایاتِ طلاق کا بیان",
+            "count": 30,
+            "firstId": 1501,
+            "lastId": 1530,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۵): طلاق بالکتابت کا بیان",
+            "count": 12,
+            "firstId": 1531,
+            "lastId": 1542,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (٦): تفویض، توکیل اور تعلیقِ طلاق کا بیان",
+            "count": 18,
+            "firstId": 1543,
+            "lastId": 1560,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۷): سکران، مجنون اور مکرَہ کی طلاق کا بیان",
+            "count": 6,
+            "firstId": 1561,
+            "lastId": 1566,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۸): ظہار کا بیان",
+            "count": 4,
+            "firstId": 1567,
+            "lastId": 1570,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۹): ایلاء کا بیان",
+            "count": 3,
+            "firstId": 1571,
+            "lastId": 1573,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۱۰): خلع کا بیان",
+            "count": 2,
+            "firstId": 1574,
+            "lastId": 1575,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۱۱): فسخ و تفریق کا بیان",
+            "count": 19,
+            "firstId": 1576,
+            "lastId": 1594,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۱۲): عدت کا بیان",
+            "count": 34,
+            "firstId": 1595,
+            "lastId": 1628,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۱۳): ثبوتِ نسب کا بیان",
+            "count": 7,
+            "firstId": 1629,
+            "lastId": 1635,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۱٤): پر ورش کا بیان",
+            "count": 9,
+            "firstId": 1636,
+            "lastId": 1644,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۱۵): نفقہ اور سکنی کا بیان",
+            "count": 17,
+            "firstId": 1645,
+            "lastId": 1661,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب الرضاع",
+            "count": 12,
+            "firstId": 1662,
+            "lastId": 1673,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب حقوق الزوجین",
+            "count": 21,
+            "firstId": 1674,
+            "lastId": 1694,
+            "pageStart": null,
+            "pageEnd": null
+          }
+        ]
+      },
+      {
+        "title": "كتاب الأيمان والنذور",
+        "count": 48,
+        "firstId": 1695,
+        "lastId": 1742,
+        "pageStart": null,
+        "pageEnd": null,
+        "sections": [
+          {
+            "title": "باب (۱): ایمان سے متعلق احکام",
+            "count": 17,
+            "firstId": 1695,
+            "lastId": 1711,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۲): نذر سے متعلق احکام",
+            "count": 24,
+            "firstId": 1712,
+            "lastId": 1735,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۳): کفارۂ یمین کا بیان",
+            "count": 7,
+            "firstId": 1736,
+            "lastId": 1742,
+            "pageStart": null,
+            "pageEnd": null
+          }
+        ]
+      },
+      {
+        "title": "كتاب الحدود والقصاص",
+        "count": 44,
+        "firstId": 1743,
+        "lastId": 1786,
+        "pageStart": null,
+        "pageEnd": null,
+        "sections": [
+          {
+            "title": "باب (۱): حدود اور قصاص کا بیان",
+            "count": 20,
+            "firstId": 1743,
+            "lastId": 1762,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۲): تعزیرات كا بيان",
+            "count": 8,
+            "firstId": 1763,
+            "lastId": 1770,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۳): احکام الضمان",
+            "count": 16,
+            "firstId": 1771,
+            "lastId": 1786,
+            "pageStart": null,
+            "pageEnd": null
+          }
+        ]
+      },
+      {
+        "title": "كتاب الوقف",
+        "count": 78,
+        "firstId": 1787,
+        "lastId": 1864,
+        "pageStart": null,
+        "pageEnd": null,
+        "sections": [
+          {
+            "title": "باب (۱): مطلق وقف کا بیان",
+            "count": 22,
+            "firstId": 1787,
+            "lastId": 1808,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۲) ما يتعلق بالمساجد",
+            "count": 45,
+            "firstId": 1809,
+            "lastId": 1853,
+            "pageStart": null,
+            "pageEnd": null
+          },
+          {
+            "title": "باب (۳): احکام مدارس کا بیان",
+            "count": 11,
+            "firstId": 1854,
+            "lastId": 1864,
+            "pageStart": null,
+            "pageEnd": null
+          }
+        ]
+      }
+    ]
+  }
+}
