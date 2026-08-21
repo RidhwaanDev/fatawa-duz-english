@@ -121,6 +121,10 @@
     color: var(--color-ink);
   }
   .search-shell input::placeholder { color: var(--color-faint); }
+  /* The app draws its own clear button; hide the native one in both engines. */
+  .search-shell input::-webkit-search-cancel-button,
+  .search-shell input::-webkit-search-decoration { -webkit-appearance: none; appearance: none; }
+  .search-shell input[type="search"] { -webkit-appearance: none; appearance: none; }
 
   /* ---- buttons ---- */
   .btn {
@@ -132,6 +136,8 @@
   }
   .btn:hover { background: var(--color-sunk); color: var(--color-ink); }
   .btn-solid {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border px-4 py-2
+           text-[13px] font-medium transition-colors duration-200;
     background: var(--color-accent);
     border-color: var(--color-accent);
     color: #fff;

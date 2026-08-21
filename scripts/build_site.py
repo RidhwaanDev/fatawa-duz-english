@@ -10,6 +10,7 @@ import json
 import os
 import re
 import sys
+import unicodedata
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from categories import classify, ORDER
@@ -23,6 +24,16 @@ OUT = os.path.join(ROOT, "public", "data")
 
 AR = r"\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF"
 RTL = re.compile(f"[{AR}]")
+# Modifier letters used in transliteration (ʿayn / hamza) carry no combining mark.
+MODIFIERS = str.maketrans({"\u02bf": None, "\u02be": None, "\u2018": None,
+                           "\u2019": "'", "\u02bc": "'"})
+
+
+def fold(text):
+    """Strip diacritics so 'ṣalāh' and 'salah' match, and 'wuḍūʾ' matches 'wudu'."""
+    text = text.translate(MODIFIERS)
+    text = unicodedata.normalize("NFD", text)
+    return "".join(c for c in text if not unicodedata.combining(c))
 
 
 def snippet(text, limit=210):
@@ -35,9 +46,10 @@ def snippet(text, limit=210):
 
 
 def searchable(*parts):
-    """Latin-only lowercase text used for client-side matching."""
+    """Latin-only, diacritic-folded lowercase text used for client-side matching."""
     text = " ".join(p or "" for p in parts)
     text = RTL.sub(" ", text)
+    text = fold(text)
     text = re.sub(r"[^a-z0-9' ]+", " ", text.lower())
     return re.sub(r"\s+", " ", text).strip()
 
@@ -96,7 +108,7 @@ def main():
         idx["c"].append(slug)
         idx["v"].append(src.get("volume"))
         idx["s"].append(snippet(body_q or body_a))
-        idx["k"].append(searchable(title, body_q[:700], body_a[:700]))
+        idx["k"].append(searchable(title, body_q[:1400], body_a[:1400]))
         idx["e"].append(1 if en else 0)
         cat_counts[slug] = cat_counts.get(slug, 0) + 1
 

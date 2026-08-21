@@ -115,15 +115,55 @@ function renderUrdu(text) {
 /* ------------------------------------------------------------------ */
 /*  Search                                                             */
 /* ------------------------------------------------------------------ */
+/** Strip diacritics so "ṣalāh" matches "salah" and "wuḍūʾ" matches "wudu".
+ *  Must mirror fold() in scripts/build_site.py. */
+function fold(s) {
+  return String(s)
+    .replace(/[\u02bf\u02be\u2018]/g, '')
+    .replace(/[\u2019\u02bc]/g, "'")
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
 function tokenize(q) {
-  return (q.toLowerCase().match(/[a-z0-9']+/g) || []).filter(t => t.length > 1);
+  return (fold(q).toLowerCase().match(/[a-z0-9']+/g) || []).filter(t => t.length > 1);
+}
+
+/* Students search with Arabic/Urdu terms, but the translation deliberately uses
+ * plain English ("ritual bath", not "ghusl"). Bridge the two vocabularies. */
+const SYNONYMS = {
+  salah: ['prayer'], salat: ['prayer'], salaah: ['prayer'], namaz: ['prayer'],
+  namaaz: ['prayer'], sunnah: ['sunnah'], witr: ['witr'],
+  wudu: ['ablution'], wuzu: ['ablution'], whudu: ['ablution'],
+  ghusl: ['ritual bath', 'bath'], tayammum: ['tayammum'],
+  janazah: ['funeral'], janaza: ['funeral'], jinazah: ['funeral'],
+  qurbani: ['sacrifice'], udhiyah: ['sacrifice'], aqiqah: ['aqiqah'],
+  sawm: ['fasting', 'fast'], roza: ['fasting', 'fast'], ramadan: ['ramadan'],
+  zakah: ['zakat'], sadaqah: ['charity'], sadqa: ['charity'], khairat: ['charity'],
+  nikah: ['marriage'], shadi: ['marriage'], talaq: ['divorce'], khula: ['divorce'],
+  iddah: ['waiting period'], mahr: ['dower'], haq: ['right'],
+  riba: ['interest'], sood: ['interest'], bay: ['sale'], tijarat: ['trade'],
+  meeras: ['inheritance'], wirasat: ['inheritance'], faraid: ['inheritance'],
+  waqf: ['endowment'], hajj: ['pilgrimage'], umrah: ['umrah'],
+  makruh: ['disliked'], haram: ['unlawful', 'impermissible'],
+  halal: ['lawful', 'permissible'], jaiz: ['permissible'], najis: ['impure'],
+  fard: ['obligatory'], wajib: ['necessary'], mustahab: ['recommended'],
+  masjid: ['mosque'], imam: ['imam'], azan: ['adhan'], adhan: ['adhan'],
+  quran: ['quran'], hadith: ['hadith'], dua: ['supplication'],
+  taharat: ['purification'], tahara: ['purification'],
+};
+
+function expand(term) {
+  const extra = SYNONYMS[term];
+  return extra ? [term, ...extra] : [term];
 }
 
 function runSearch(q, filters = {}) {
   const ix = state.index;
   if (!ix) return [];
   const terms  = tokenize(q);
-  const phrase = q.toLowerCase().trim();
+  const phrase = fold(q).toLowerCase().trim();
+  const variants = terms.map(expand);
   const usePhrase = phrase.length > 4 && terms.length > 1;
   const out = [];
 
@@ -134,26 +174,30 @@ function runSearch(q, filters = {}) {
 
     if (!terms.length) { out.push({ i, score: 0 }); continue; }
 
-    const title = ix.t[i].toLowerCase();
+    const title = fold(ix.t[i]).toLowerCase();
     const key   = ix.k[i];
     let score = 0, matched = 0;
 
-    for (const term of terms) {
-      let s = 0;
-      const inTitle = title.includes(term);
-      const inKey   = key.includes(term);
-      if (inTitle) {
-        s += 16;
-        if (new RegExp(`\\b${escRe(term)}`).test(title)) s += 8;
+    for (const forms of variants) {
+      let best = 0;
+      for (let v = 0; v < forms.length; v++) {
+        const term = forms[v];
+        let s = 0;
+        if (title.includes(term)) {
+          s += 16;
+          if (new RegExp(`\\b${escRe(term)}`).test(title)) s += 8;
+        }
+        if (key.includes(term)) {
+          s += 5;
+          if (new RegExp(`\\b${escRe(term)}`).test(key)) s += 3;
+        }
+        if (v > 0) s *= 0.85;          // slight preference for the literal term
+        if (s > best) best = s;
       }
-      if (inKey) {
-        s += 5;
-        if (new RegExp(`\\b${escRe(term)}`).test(key)) s += 3;
-      }
-      if (s) matched++;
-      score += s;
+      if (best) matched++;
+      score += best;
     }
-    // Every term must appear somewhere.
+    // Every term (or one of its synonyms) must appear somewhere.
     if (matched < terms.length) continue;
 
     if (usePhrase) {
@@ -352,7 +396,16 @@ function wireHomeSearch() {
   const update = debounce(() => {
     const q = input.value.trim();
     if (q.length < 2) { items = []; return close(); }
-    loadIndex().then(() => { items = runSearch(q).slice(0, 6); active = -1; paint(); });
+    if (!state.index) {
+      box.innerHTML = `<div class="flex items-center gap-2.5 px-4 py-3 text-[13.5px]"
+           style="color: var(--color-muted)">
+        <span class="skel h-3.5 w-3.5 !rounded-full"></span> Loading the collection…</div>`;
+      box.classList.remove('hidden');
+    }
+    loadIndex().then(() => {
+      if (input.value.trim() !== q) return;
+      items = runSearch(q).slice(0, 6); active = -1; paint();
+    });
   }, 110);
 
   input.addEventListener('input', update);
@@ -480,6 +533,7 @@ function viewSearch(params) {
              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                <path d="M18 6 6 18M6 6l12 12" stroke-linecap="round"/></svg></button>` : ''}
         </form>
+        <h1 class="sr-only">${params.q ? `Search results for ${esc(params.q)}` : 'Browse fatawa'}</h1>
         <p class="mt-4 text-[13.5px]" style="color: var(--color-muted)">
           <span class="tabular-nums" style="color: var(--color-ink)">${nfmt(results.length)}</span>
           ${results.length === 1 ? 'fatwa' : 'fatawa'}${params.q ? ` for “${esc(params.q)}”` : ''}
@@ -693,6 +747,8 @@ function viewFatwa(id) {
       </nav>
     </article>`;
 
+    setTitle([f.title, `Fatwa ${f.id}`]);
+
     const urduBtn = $('#urduBtn');
     urduBtn.addEventListener('click', () => {
       const showing = $('#urduPane').classList.toggle('hidden');
@@ -736,6 +792,7 @@ function viewBrowse(volume) {
   const vols = m.volumes;
 
   if (!volume) {
+    setTitle('Browse');
     main.innerHTML = `
     <div class="wrap py-12">
       <header class="anim-rise max-w-xl">
@@ -774,6 +831,7 @@ function viewBrowse(volume) {
   const v = vols.find(x => x.volume === volume);
   if (!v) { main.innerHTML = `<div class="wrap">${emptyState('Volume not found', '')}</div>`; return; }
 
+  setTitle(`Volume ${v.volume}`);
   main.innerHTML = `
   <div class="wrap-narrow py-12">
     <nav class="anim-fade mb-6 text-[12.5px]" style="color: var(--color-muted)">
@@ -781,8 +839,9 @@ function viewBrowse(volume) {
       <span class="mx-2">/</span>Volume ${v.volume}
     </nav>
     <header class="anim-rise">
-      <p class="eyebrow">Volume ${v.volume}</p>
-      <h1 class="display mt-3 text-[32px] leading-tight sm:text-[40px]">${nfmt(v.total)} fatawa</h1>
+      <p class="eyebrow">The collection</p>
+      <h1 class="display mt-3 text-[32px] leading-tight sm:text-[40px]">Volume ${v.volume}</h1>
+      <p class="mt-2 text-[15px]" style="color: var(--color-muted)">${nfmt(v.total)} fatawa</p>
     </header>
     <div class="stagger mt-9 space-y-2.5">
       ${v.chapters.map(c => `
@@ -964,9 +1023,33 @@ function viewAbout() {
   </div>`;
 }
 
+const SITE_NAME = 'Fatawa Darul Uloom Zakariyya — English Edition';
+
+/** Give every route a distinct, meaningful document title. */
+function setTitle(parts) {
+  const bits = (Array.isArray(parts) ? parts : [parts]).filter(Boolean);
+  document.title = bits.length ? `${bits.join(' · ')} — ${SITE_NAME}` : SITE_NAME;
+}
+
 /* ------------------------------------------------------------------ */
 /*  Shell                                                              */
 /* ------------------------------------------------------------------ */
+
+/** Dismiss any open overlay. Called on every route change so the drawer or
+ *  filter sheet can never survive a Back/Forward navigation and leave the
+ *  page scroll-locked behind a scrim. */
+function closeOverlays() {
+  document.querySelectorAll('.sheet, .sheet-scrim').forEach(n => n.remove());
+  const drawer = $('#navDrawer');
+  const scrim = $('#navScrim');
+  if (drawer && !drawer.classList.contains('hidden')) {
+    drawer.classList.add('hidden', '-translate-y-full');
+    scrim.classList.add('hidden');
+    $('#menuToggle')?.setAttribute('aria-expanded', 'false');
+  }
+  document.body.style.overflow = '';
+}
+
 function syncHeader(route) {
   const hs = $('#headerSearch');
   // The search and home views carry their own search field.
@@ -984,6 +1067,7 @@ function syncHeader(route) {
 function render() {
   const route = parseHash();
   state.route = route;
+  closeOverlays();
 
   loadMeta().then(() => {
     syncHeader(route);
@@ -991,9 +1075,9 @@ function render() {
       case 'fatwa':  viewFatwa(route.params.id); break;
       case 'search': viewSearch(route.params); break;
       case 'browse': viewBrowse(route.params.volume); break;
-      case 'about':  viewAbout(); break;
+      case 'about':  viewAbout(); setTitle('About'); break;
       case 'books':  viewBooks(route.params.slug); break;
-      default:       viewHome();
+      default:       viewHome(); setTitle(null);
     }
     if (route.name !== 'fatwa') window.scrollTo(0, 0);
   }).catch(() => {
