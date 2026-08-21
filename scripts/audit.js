@@ -1,10 +1,9 @@
 /* UI audit: every view at mobile / tablet / desktop.
    Flags horizontal overflow, clipped text, small tap targets, and
    elements escaping the viewport. Writes screenshots to .shots/audit/. */
-const puppeteer = require('puppeteer-core');
+const { chromium, devices } = require('@playwright/test');
 const fs = require('fs');
 
-const CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const BASE = 'http://localhost:4173/';
 const OUT = '.shots/audit';
 
@@ -90,22 +89,16 @@ const audit = () => {
 
 (async () => {
   fs.mkdirSync(OUT, { recursive: true });
-  const browser = await puppeteer.launch({
-    executablePath: CHROME, headless: 'new',
-    args: ['--no-sandbox', '--font-render-hinting=none'],
-  });
+  const browser = await chromium.launch();
 
   let total = 0;
   for (const vp of VIEWPORTS) {
     console.log(`\n━━━ ${vp.name} (${vp.width}×${vp.height}) ━━━`);
     for (const [name, hash] of ROUTES) {
       const page = await browser.newPage();
-      await page.setViewport({
-        width: vp.width, height: vp.height,
-        deviceScaleFactor: 2, isMobile: vp.mobile, hasTouch: vp.mobile,
-      });
-      await page.evaluateOnNewDocument((m) => { window.__isMobile = m; }, vp.mobile);
-      await page.goto(BASE + hash, { waitUntil: 'networkidle2', timeout: 45000 });
+      await page.setViewportSize({ width: vp.width, height: vp.height });
+      await page.addInitScript((m) => { window.__isMobile = m; }, vp.mobile);
+      await page.goto(BASE + hash, { waitUntil: 'networkidle', timeout: 45000 });
       await new Promise(r => setTimeout(r, 800));
 
       const issues = await page.evaluate(audit);

@@ -180,6 +180,33 @@
 
   .rule { @apply h-px w-full; background: var(--color-line-soft); }
 
+  /* Permanent notice band above the header. */
+  .disclaimer {
+    border-bottom: 1px solid color-mix(in srgb, #b45309 24%, transparent);
+    background: #fdf6e7;
+    color: #6b4708;
+  }
+  .disclaimer p {
+    @apply text-[12.5px] leading-[1.55];
+  }
+  .disclaimer strong { font-weight: 600; }
+  .disclaimer a {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    font-weight: 500;
+    color: #7c4a02;
+  }
+  .disclaimer a:hover { opacity: .75; }
+  .disclaimer svg { color: #b45309; }
+
+  html[data-theme="dark"] .disclaimer {
+    background: #241c0d;
+    color: #e4c78d;
+    border-bottom-color: color-mix(in srgb, #f0b45e 22%, transparent);
+  }
+  html[data-theme="dark"] .disclaimer a { color: #f3c983; }
+  html[data-theme="dark"] .disclaimer svg { color: #e0a53f; }
+
   .nav-link {
     @apply flex items-center rounded-lg px-3 py-3 text-[15px] transition-colors duration-150;
     color: var(--color-ink-soft);

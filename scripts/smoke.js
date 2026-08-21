@@ -1,9 +1,8 @@
 /* Headless smoke test: loads every view, fails on console/page errors,
    and writes screenshots to .shots/ for visual review. */
-const puppeteer = require('puppeteer-core');
+const { chromium, devices } = require('@playwright/test');
 const fs = require('fs');
 
-const CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const BASE = 'http://localhost:4173/';
 const OUT = '.shots';
 
@@ -20,25 +19,21 @@ const ROUTES = [
 
 (async () => {
   fs.mkdirSync(OUT, { recursive: true });
-  const browser = await puppeteer.launch({
-    executablePath: CHROME,
-    headless: 'new',
-    args: ['--no-sandbox', '--font-render-hinting=none'],
-  });
+  const browser = await chromium.launch();
 
   const errors = [];
   let failed = false;
 
   for (const [name, hash] of ROUTES) {
     const page = await browser.newPage();
-    await page.setViewport({ width: 1280, height: 900, deviceScaleFactor: 2 });
+    await page.setViewportSize({ width: 1280, height: 900 });
     page.on('console', m => {
       if (m.type() === 'error') errors.push(`[${name}] console: ${m.text()}`);
     });
     page.on('pageerror', e => errors.push(`[${name}] pageerror: ${e.message}`));
     page.on('requestfailed', r => errors.push(`[${name}] requestfailed: ${r.url()}`));
 
-    await page.goto(BASE + hash, { waitUntil: 'networkidle2', timeout: 45000 });
+    await page.goto(BASE + hash, { waitUntil: 'networkidle', timeout: 45000 });
     await new Promise(r => setTimeout(r, 900));
 
     const info = await page.evaluate(() => ({
@@ -64,9 +59,9 @@ const ROUTES = [
 
   // interaction test: typing in the landing search shows suggestions
   const page = await browser.newPage();
-  await page.setViewport({ width: 1280, height: 900, deviceScaleFactor: 2 });
+  await page.setViewportSize({ width: 1280, height: 900 });
   page.on('pageerror', e => errors.push(`[interaction] pageerror: ${e.message}`));
-  await page.goto(BASE + '#/', { waitUntil: 'networkidle2' });
+  await page.goto(BASE + '#/', { waitUntil: 'networkidle' });
   await page.waitForSelector('#homeInput');
   await page.type('#homeInput', 'divorce', { delay: 45 });
   await new Promise(r => setTimeout(r, 1200));

@@ -1,10 +1,9 @@
 /* Interaction tests for the components the static audit can't reach:
    mobile nav drawer, mobile filter sheet, theme toggle, Urdu toggle,
    search suggestions, and the "show more" pagination. */
-const puppeteer = require('puppeteer-core');
+const { chromium, devices } = require('@playwright/test');
 const fs = require('fs');
 
-const CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const BASE = 'http://localhost:4173/';
 const OUT = '.shots/interact';
 
@@ -16,18 +15,15 @@ const check = (name, ok, detail = '') => {
 
 (async () => {
   fs.mkdirSync(OUT, { recursive: true });
-  const browser = await puppeteer.launch({
-    executablePath: CHROME, headless: 'new',
-    args: ['--no-sandbox', '--font-render-hinting=none'],
-  });
+  const browser = await chromium.launch();
   const errors = [];
 
   // ---------- mobile ----------
   console.log('\n━━━ mobile interactions (390×844) ━━━');
   let page = await browser.newPage();
-  await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
+  await page.setViewportSize({ width: 1280, height: 900 });
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
-  await page.goto(BASE + '#/', { waitUntil: 'networkidle2' });
+  await page.goto(BASE + '#/', { waitUntil: 'networkidle' });
   await new Promise(r => setTimeout(r, 600));
 
   // nav drawer
@@ -56,7 +52,7 @@ const check = (name, ok, detail = '') => {
   await page.screenshot({ path: `${OUT}/mobile-suggest.png` });
 
   // filter sheet
-  await page.goto(BASE + '#/search?category=prayer', { waitUntil: 'networkidle2' });
+  await page.goto(BASE + '#/search?category=prayer', { waitUntil: 'networkidle' });
   await new Promise(r => setTimeout(r, 900));
   await page.click('#filterOpen');
   await new Promise(r => setTimeout(r, 600));
@@ -89,11 +85,11 @@ const check = (name, ok, detail = '') => {
   // ---------- desktop ----------
   console.log('\n━━━ desktop interactions (1440×900) ━━━');
   page = await browser.newPage();
-  await page.setViewport({ width: 1440, height: 900, deviceScaleFactor: 2 });
+  await page.setViewportSize({ width: 1280, height: 900 });
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
 
   // theme toggle persists
-  await page.goto(BASE + '#/', { waitUntil: 'networkidle2' });
+  await page.goto(BASE + '#/', { waitUntil: 'networkidle' });
   await new Promise(r => setTimeout(r, 500));
   const t0 = await page.evaluate(() => document.documentElement.dataset.theme);
   await page.click('#themeToggle');
@@ -101,7 +97,7 @@ const check = (name, ok, detail = '') => {
   const t1 = await page.evaluate(() => document.documentElement.dataset.theme);
   check('theme toggles', t0 !== t1, `${t0} → ${t1}`);
   await page.screenshot({ path: `${OUT}/desktop-${t1}.png` });
-  await page.reload({ waitUntil: 'networkidle2' });
+  await page.reload({ waitUntil: 'networkidle' });
   await new Promise(r => setTimeout(r, 500));
   check('theme persists across reload',
         await page.evaluate(() => document.documentElement.dataset.theme) === t1);
@@ -109,7 +105,7 @@ const check = (name, ok, detail = '') => {
   await new Promise(r => setTimeout(r, 300));
 
   // Urdu toggle on a translated fatwa
-  await page.goto(BASE + '#/fatwa/1', { waitUntil: 'networkidle2' });
+  await page.goto(BASE + '#/fatwa/1', { waitUntil: 'networkidle' });
   await new Promise(r => setTimeout(r, 900));
   await page.click('#urduBtn');
   await new Promise(r => setTimeout(r, 400));
@@ -126,7 +122,7 @@ const check = (name, ok, detail = '') => {
         await page.evaluate(() => document.querySelector('#urduPane').classList.contains('hidden')));
 
   // keyboard shortcut
-  await page.goto(BASE + '#/about', { waitUntil: 'networkidle2' });
+  await page.goto(BASE + '#/about', { waitUntil: 'networkidle' });
   await new Promise(r => setTimeout(r, 500));
   await page.keyboard.press('/');
   await new Promise(r => setTimeout(r, 250));

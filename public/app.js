@@ -182,6 +182,7 @@ function parseHash() {
   if (seg[0] === 'fatwa' && seg[1]) return { name: 'fatwa', params: { id: Number(seg[1]) } };
   if (seg[0] === 'browse') return { name: 'browse', params: { volume: seg[1] ? Number(seg[1]) : null } };
   if (seg[0] === 'about')  return { name: 'about', params: {} };
+  if (seg[0] === 'books')  return { name: 'books', params: { slug: seg[1] || null } };
   if (seg[0] === 'search') return {
     name: 'search',
     params: {
@@ -804,9 +805,100 @@ function viewBrowse(volume) {
   </div>`;
 }
 
+
 /* ------------------------------------------------------------------ */
-/*  View: about                                                        */
-/* ------------------------------------------------------------------ */
+const BOOKS = [
+  {
+    slug: 'al-hilat-al-najizah',
+    title: "al-\u1e24\u012blat al-N\u0101jizah li'l-\u1e24al\u012blat al-\u02bf\u0100jizah",
+    subtitle: 'The Effective Stratagem for the Helpless Wife',
+    author: 'Ashraf \u02bfAl\u012b Th\u0101nw\u012b',
+    year: 'c. 1932',
+    pages: 377,
+    summary: `A Hanafi treatise on the dissolution of marriage \u2014 the wife of a missing
+      husband (mafq\u016bd), an impotent husband, and a husband who withholds his wife's
+      rights. Translated from the lithographed Urdu, with the Arabic fatwas of the
+      Maliki jurists reproduced as facsimiles of the original.`,
+    file: './books/al-hilat-al-najizah.pdf',
+  },
+];
+
+function viewBooks(slug) {
+  const book = slug ? BOOKS.find(b => b.slug === slug) : null;
+  if (slug && !book) {
+    main.innerHTML = `<div class="wrap">${emptyState('Book not found',
+      'That title is not in the library.')}</div>`;
+    return;
+  }
+  if (book) return viewBookReader(book);
+
+  main.innerHTML = `
+  <div class="wrap-narrow py-14">
+    <header class="anim-rise">
+      <p class="eyebrow">Library</p>
+      <h1 class="display mt-3 text-[34px] leading-tight sm:text-[42px]">Books</h1>
+      <p class="mt-4 text-[16px] leading-[1.75]" style="color: var(--color-ink-soft)">
+        Complete works translated from Urdu into English, alongside the fatwa collection.
+      </p>
+    </header>
+
+    <div class="anim-rise mt-10 space-y-5" style="animation-delay:.06s">
+      ${BOOKS.map(b => `
+        <article class="card !p-6">
+          <p class="eyebrow">${esc(b.author)} \u00b7 ${esc(b.year)}</p>
+          <h2 class="display mt-2 text-[21px] leading-snug">
+            <a href="#/books/${b.slug}" class="tap transition-opacity hover:opacity-70">${esc(b.title)}</a>
+          </h2>
+          <p class="mt-1 text-[15px] italic" style="color: var(--color-muted)">${esc(b.subtitle)}</p>
+          <p class="mt-4 text-[15px] leading-[1.7]" style="color: var(--color-ink-soft)">
+            ${esc(b.summary.replace(/\s+/g, ' ').trim())}
+          </p>
+          <div class="mt-5 flex flex-wrap items-center gap-3">
+            <a class="btn-solid" href="#/books/${b.slug}">Read online</a>
+            <a class="btn" href="${b.file}" download>Download PDF</a>
+            <span class="text-[13px]" style="color: var(--color-faint)">${b.pages} pages</span>
+          </div>
+        </article>`).join('')}
+    </div>
+  </div>`;
+}
+
+function viewBookReader(b) {
+  main.innerHTML = `
+  <div class="wrap py-8">
+    <nav class="anim-rise flex items-center gap-2 text-[13px]" style="color: var(--color-muted)">
+      <a href="#/books" class="tap transition-colors hover:opacity-70">Books</a>
+      <span>/</span>
+      <span style="color: var(--color-faint)">${esc(b.subtitle)}</span>
+    </nav>
+
+    <header class="anim-rise mt-4 flex flex-wrap items-end justify-between gap-4" style="animation-delay:.04s">
+      <div class="min-w-0 flex-1">
+        <h1 class="display text-[24px] leading-snug sm:text-[30px]">${esc(b.title)}</h1>
+        <p class="mt-1 text-[14px]" style="color: var(--color-muted)">
+          ${esc(b.author)} \u00b7 ${esc(b.year)} \u00b7 ${b.pages} pages
+        </p>
+      </div>
+      <div class="flex shrink-0 flex-wrap items-center gap-2">
+        <a class="btn" href="${b.file}" target="_blank" rel="noopener noreferrer">Full screen \u2197</a>
+        <a class="btn-solid" href="${b.file}" download>Download</a>
+      </div>
+    </header>
+
+    <div class="anim-rise mt-6 overflow-hidden rounded-xl border"
+         style="border-color: var(--color-line); background: var(--color-raised); animation-delay:.08s">
+      <iframe src="${b.file}#view=FitH&amp;navpanes=0" title="${esc(b.title)}"
+              class="block h-[78vh] min-h-[520px] w-full border-0"></iframe>
+    </div>
+
+    <p class="mt-3 text-center text-[13px]" style="color: var(--color-faint)">
+      Trouble viewing?
+      <a class="underline underline-offset-2" href="${b.file}" download
+         style="color: var(--color-accent)">Download the PDF</a> instead.
+    </p>
+  </div>`;
+}
+
 function viewAbout() {
   const m = state.meta;
   main.innerHTML = `
@@ -847,10 +939,19 @@ function viewAbout() {
 
       <h2 class="display pt-3 text-[21px]" style="color: var(--color-ink)">A note on use</h2>
       <p>
-        A translation is not a substitute for the original, and a fatwa answers the question of
-        the person who asked it, in their circumstances. For a ruling on your own situation,
-        consult a qualified muftī. Where the English and the Urdu appear to differ, the Urdu
-        original governs; it is provided on every page.
+        <strong>This edition is AI-generated and is not a citable source.</strong> It exists for
+        the internal use of a small group of students. The English was produced by Claude Opus 5
+        (1M context, maximum reasoning effort) and has not been reviewed by a scholar, so it may
+        contain errors of nuance or of law. It must not be quoted, cited, published, or forwarded
+        as an authority.
+      </p>
+      <p>
+        A translation is in any case not a substitute for the original, and a fatwa answers the
+        question of the person who asked it, in their circumstances. For a ruling on your own
+        situation, consult a qualified muftī. Where the English and the Urdu differ, the Urdu
+        original governs; it is provided on every page. For the authoritative text, refer to
+        <a href="https://fduz.org" target="_blank" rel="noopener noreferrer"
+           class="underline underline-offset-2" style="color: var(--color-accent)">fduz.org</a>.
       </p>
 
       <div class="rule my-4"></div>
@@ -891,6 +992,7 @@ function render() {
       case 'search': viewSearch(route.params); break;
       case 'browse': viewBrowse(route.params.volume); break;
       case 'about':  viewAbout(); break;
+      case 'books':  viewBooks(route.params.slug); break;
       default:       viewHome();
     }
     if (route.name !== 'fatwa') window.scrollTo(0, 0);

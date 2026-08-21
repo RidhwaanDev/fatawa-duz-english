@@ -17,3 +17,6 @@ data/*.log
 
 # netlify
 .netlify/
+
+# large source PDFs (served from Netlify, not versioned)
+public/books/*.pdf
