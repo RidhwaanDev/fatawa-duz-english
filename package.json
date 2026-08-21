@@ -4,10 +4,11 @@
   "private": true,
   "description": "English edition of Fatawa Darul Uloom Zakariyya",
   "scripts": {
-    "css": "@tailwindcss/cli -i ./src/input.css -o ./public/styles.css --minify",
-    "watch": "@tailwindcss/cli -i ./src/input.css -o ./public/styles.css --watch",
+    "css": "tailwindcss -i ./src/input.css -o ./public/styles.css --minify",
+    "watch": "tailwindcss -i ./src/input.css -o ./public/styles.css --watch",
     "data": "python3 scripts/build_site.py",
-    "build": "npm run data && npm run css",
+    "data:mahmudiyyah": "python3 scripts/build_mahmudiyyah.py",
+    "build": "npm run data && npm run data:mahmudiyyah && npm run css",
     "serve": "python3 -m http.server 4173 --directory public"
   },
   "devDependencies": {

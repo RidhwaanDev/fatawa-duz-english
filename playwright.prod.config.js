@@ -2,7 +2,7 @@
    Usage: npx playwright test --config=playwright.prod.config.js */
 const { defineConfig, devices } = require('@playwright/test');
 
-const BASE = process.env.PROD_URL || 'https://fatawa-zakariyya-english.netlify.app';
+const BASE = process.env.PROD_URL || 'https://fatawa-english.netlify.app';
 
 module.exports = defineConfig({
   testDir: './tests',

@@ -24,17 +24,84 @@ function debounce(fn, ms) {
 }
 
 /* ------------------------------------------------------------------ */
+/*  Collections                                                        */
+/* ------------------------------------------------------------------ */
+/* Two collections share every view. `prefix` is the hash segment that
+   selects one; the default collection has an empty prefix so all of the
+   original URLs keep working unchanged. */
+const BOOKS = {
+  zakariyya: {
+    key: 'zakariyya',
+    prefix: '',
+    dir: '',
+    title: 'Fatawa Darul Uloom Zakariyya',
+    short: 'Fatawa Zakariyya',
+    nav: 'Zakariyya',
+    blurb: 'Nine volumes, translated from the original Urdu.',
+    homeBlurb: 'The complete fatwa collection, translated from the original Urdu into English. Arabic citations are preserved exactly as they appear in the source.',
+    sourceUrl: 'https://fduz.org',
+    sourceLabel: 'fduz.org',
+    volumeWord: 'Volume',
+  },
+  mahmudiyyah: {
+    key: 'mahmudiyyah',
+    prefix: 'mahmudiyyah',
+    dir: 'mahmudiyyah/',
+    title: 'Fatawa Mahmudiyyah',
+    short: 'Fatawa Mahmudiyyah',
+    nav: 'Mahmudiyyah',
+    blurb: 'Rulings of Mufti Mahmood Hasan Gangohi, summarised from the scanned Urdu.',
+    homeBlurb: 'Rulings of Mufti Mahmood Hasan Gangohi, summarised in English from the scanned Urdu. Every entry links to the original page so the wording can be checked.',
+    sourceUrl: 'https://archive.org/details/Fatawa-Mahmoodia',
+    sourceLabel: 'archive.org',
+    volumeWord: 'Volume',
+  },
+};
+const BOOK_LIST = Object.values(BOOKS);
+const DEFAULT_BOOK = 'zakariyya';
+
+/** "Nine volumes" / "Volume 2" / "3 volumes" — describes a collection's spread. */
+const NUM_WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven',
+                   'eight', 'nine', 'ten'];
+function volumeSummary(m) {
+  const vols = (m.volumes || []).map(v => v.volume);
+  if (!vols.length) return 'No volumes';
+  if (vols.length === 1) return `Volume ${vols[0]}`;
+  const word = NUM_WORDS[vols.length] || String(vols.length);
+  return `${word.charAt(0).toUpperCase()}${word.slice(1)} volumes`;
+}
+
+/* ------------------------------------------------------------------ */
 /*  State                                                              */
 /* ------------------------------------------------------------------ */
-const state = {
-  meta: null,
-  index: null,
-  indexPromise: null,
-  route: { name: 'home', params: {} },
-  fatwaCache: new Map(),
-};
+/* Each collection gets its own slot, so switching between them never
+   serves one collection's index against the other's metadata. */
+const slots = {};
+for (const k of Object.keys(BOOKS)) {
+  slots[k] = { meta: null, index: null, indexPromise: null, fatwaCache: new Map() };
+}
 
-const dataUrl = (p) => `./data/${p}`;
+const state = {
+  book: DEFAULT_BOOK,
+  route: { name: 'home', params: {} },
+};
+/* `state.meta` / `state.index` always read the active collection, which lets
+   every view below stay collection-agnostic. */
+Object.defineProperties(state, {
+  meta:       { get: () => slots[state.book].meta },
+  index:      { get: () => slots[state.book].index },
+  fatwaCache: { get: () => slots[state.book].fatwaCache },
+});
+
+const book = () => BOOKS[state.book];
+const dataUrl = (p) => `./data/${book().dir}${p}`;
+
+/** Build a hash href scoped to the active collection. */
+function bookHref(path = '/', key = state.book) {
+  const pre = BOOKS[key].prefix;
+  const rest = path.replace(/^\/+/, '');
+  return `#/${pre ? pre + (rest ? '/' + rest : '') : rest}`;
+}
 
 async function getJSON(url) {
   const r = await fetch(url);
@@ -42,25 +109,30 @@ async function getJSON(url) {
   return r.json();
 }
 
-const loadMeta  = () => state.meta ? Promise.resolve(state.meta)
-  : getJSON(dataUrl('meta.json')).then(m => (state.meta = m));
+function loadMeta() {
+  const s = slots[state.book];
+  return s.meta ? Promise.resolve(s.meta)
+    : getJSON(dataUrl('meta.json')).then(m => (s.meta = m));
+}
 
 function loadIndex() {
-  if (state.index) return Promise.resolve(state.index);
-  if (!state.indexPromise) {
-    state.indexPromise = getJSON(dataUrl('index.json')).then(ix => {
+  const s = slots[state.book];
+  if (s.index) return Promise.resolve(s.index);
+  if (!s.indexPromise) {
+    s.indexPromise = getJSON(dataUrl('index.json')).then(ix => {
       ix.n = ix.id.length;
-      state.index = ix;
+      s.index = ix;
       return ix;
     });
   }
-  return state.indexPromise;
+  return s.indexPromise;
 }
 
 function loadFatwa(id) {
-  if (state.fatwaCache.has(id)) return Promise.resolve(state.fatwaCache.get(id));
+  const s = slots[state.book];
+  if (s.fatwaCache.has(id)) return Promise.resolve(s.fatwaCache.get(id));
   return getJSON(dataUrl(`fatwa/${id}.json`)).then(f => {
-    state.fatwaCache.set(id, f);
+    s.fatwaCache.set(id, f);
     return f;
   });
 }
@@ -223,11 +295,19 @@ function parseHash() {
   const p = new URLSearchParams(qs || '');
   const seg = path.split('/').filter(Boolean);
 
-  if (seg[0] === 'fatwa' && seg[1]) return { name: 'fatwa', params: { id: Number(seg[1]) } };
-  if (seg[0] === 'browse') return { name: 'browse', params: { volume: seg[1] ? Number(seg[1]) : null } };
-  if (seg[0] === 'about')  return { name: 'about', params: {} };
-  if (seg[0] === 'books')  return { name: 'books', params: { slug: seg[1] || null } };
-  if (seg[0] === 'search') return {
+  // A leading collection prefix selects the book and is then consumed.
+  const hit = BOOK_LIST.find(b => b.prefix && b.prefix === seg[0]);
+  const bookKey = hit ? hit.key : DEFAULT_BOOK;
+  if (hit) seg.shift();
+  state.book = bookKey;
+
+  const withBook = (r) => (r.book = bookKey, r);
+
+  if (seg[0] === 'fatwa' && seg[1]) return withBook({ name: 'fatwa', params: { id: Number(seg[1]) } });
+  if (seg[0] === 'browse') return withBook({ name: 'browse', params: { volume: seg[1] ? Number(seg[1]) : null } });
+  if (seg[0] === 'about')  return withBook({ name: 'about', params: {} });
+  if (seg[0] === 'books')  return withBook({ name: 'books', params: { slug: seg[1] || null } });
+  if (seg[0] === 'search') return withBook({
     name: 'search',
     params: {
       q: p.get('q') || '',
@@ -237,8 +317,8 @@ function parseHash() {
       to: p.get('to') ? Number(p.get('to')) : 0,
       label: p.get('label') || '',
     }
-  };
-  return { name: 'home', params: {} };
+  });
+  return withBook({ name: 'home', params: {} });
 }
 
 function searchHref({ q = '', category = '', volume = 0, from = 0, to = 0, label = '' }) {
@@ -249,7 +329,7 @@ function searchHref({ q = '', category = '', volume = 0, from = 0, to = 0, label
   if (from) { p.set('from', String(from)); p.set('to', String(to)); }
   if (label) p.set('label', label);
   const s = p.toString();
-  return `#/search${s ? '?' + s : ''}`;
+  return `${bookHref('/search')}${s ? '?' + s : ''}`;
 }
 
 function go(href, replace = false) {
@@ -280,7 +360,7 @@ function resultCard(i, terms) {
   let title = esc(ix.t[i]);
   if (terms.length) title = highlightHtml(title, terms);
 
-  return `<a class="card group" href="#/fatwa/${id}">
+  return `<a class="card group" href="${bookHref(`/fatwa/${id}`)}">
     <div class="mb-2 flex flex-wrap items-center gap-2">
       <span class="tag">${esc(catName(ix.c[i]))}</span>
       <span class="text-[11.5px]" style="color: var(--color-faint)">
@@ -315,17 +395,16 @@ function viewHome() {
 
   main.innerHTML = `
   <section class="wrap flex flex-col items-center pt-20 pb-16 sm:pt-28">
-    <p class="eyebrow anim-fade">Nine volumes · ${nfmt(m.total)} rulings</p>
+    <p class="eyebrow anim-fade">${esc(volumeSummary(m))} · ${nfmt(m.total)} ${m.total === 1 ? 'ruling' : 'rulings'}</p>
 
     <h1 class="display anim-rise mt-5 text-center text-[38px] leading-[1.08] sm:text-[56px]"
         style="animation-delay:.04s">
-      Fatawa Darul Uloom<br>Zakariyya
+      ${esc(book().title)}
     </h1>
 
     <p class="anim-rise mt-5 max-w-lg text-center text-[16px] leading-relaxed"
        style="color: var(--color-muted); animation-delay:.09s">
-      The complete fatwa collection, translated from the original Urdu into English.
-      Arabic citations are preserved exactly as they appear in the source.
+      ${esc(book().homeBlurb)}
     </p>
 
     <div class="anim-rise relative z-20 mt-10 w-full max-w-xl" style="animation-delay:.14s">
@@ -349,7 +428,7 @@ function viewHome() {
          style="animation-delay:.19s">
       ${top.map(c => `<a class="chip" href="${searchHref({ category: c.slug })}">
         ${esc(c.name)} <span class="chip-count">${c.count}</span></a>`).join('')}
-      <a class="chip" href="#/browse">All categories →</a>
+      <a class="chip" href="${bookHref('/browse')}">All categories →</a>
     </div>
   </section>
 
@@ -383,7 +462,7 @@ function wireHomeSearch() {
     if (!items.length) return close();
     box.innerHTML = items.map((r, k) => {
       const ix = state.index;
-      return `<a href="#/fatwa/${ix.id[r.i]}" data-k="${k}"
+      return `<a href="${bookHref(`/fatwa/${ix.id[r.i]}`)}" data-k="${k}"
          class="flex items-start gap-3 border-b px-4 py-3 text-left transition-colors duration-150 last:border-0"
          style="border-color: var(--color-line-soft); ${k === active ? 'background: var(--color-sunk);' : ''}">
         <span class="tag mt-0.5 shrink-0">${esc(catName(ix.c[r.i]))}</span>
@@ -418,7 +497,7 @@ function wireHomeSearch() {
     else if (e.key === 'Escape') close();
     else if (e.key === 'Enter' && active >= 0) {
       e.preventDefault();
-      go(`#/fatwa/${state.index.id[items[active].i]}`);
+      go(bookHref(`/fatwa/${state.index.id[items[active].i]}`));
     }
   });
 
@@ -676,11 +755,18 @@ function viewFatwa(id) {
     const prev = pos > 0 ? ix.id[pos - 1] : null;
     const next = pos >= 0 && pos < ix.n - 1 ? ix.id[pos + 1] : null;
 
+    // Zakariyya records carry the full Urdu text; Mahmudiyyah entries are
+    // summaries and link out to the scanned page instead.
+    const isSummary = f.mode === 'summary';
+    const hasUrduBody = !!(f.urdu && (f.urdu.question || '').trim());
+    const sourceHref = f.scanUrl || `https://fduz.org/fatwa/${f.id}`;
+    const sourceText = f.scanUrl ? 'Scanned page' : 'Source';
+
     main.innerHTML = `
     <article class="wrap-narrow py-10">
       <nav class="anim-fade mb-6 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12.5px]"
            style="color: var(--color-muted)" aria-label="Breadcrumb">
-        <a href="#/" class="tap transition-colors hover:opacity-70">Home</a><span>/</span>
+        <a href="${bookHref('/')}" class="tap transition-colors hover:opacity-70">Home</a><span>/</span>
         <a href="${searchHref({ volume: f.volume })}" class="tap transition-colors hover:opacity-70">Volume ${f.volume}</a><span>/</span>
         <a href="${searchHref({ category: f.categorySlug })}" class="tap transition-colors hover:opacity-70">${esc(f.category)}</a>
       </nav>
@@ -699,17 +785,17 @@ function viewFatwa(id) {
       </header>
 
       <div class="mt-7 flex flex-wrap gap-2 anim-rise" style="animation-delay:.06s">
-        <button id="urduBtn" class="btn" aria-pressed="false">
+        ${hasUrduBody ? `<button id="urduBtn" class="btn" aria-pressed="false">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
             <path d="M4 5h16M4 12h16M4 19h10" stroke-linecap="round"/></svg>
           Original Urdu
-        </button>
+        </button>` : ''}
         <button id="copyBtn" class="btn">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
             <rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
           Copy link
         </button>
-        <a class="btn" href="https://fduz.org/fatwa/${f.id}" target="_blank" rel="noopener noreferrer">Source ↗</a>
+        <a class="btn" href="${esc(sourceHref)}" target="_blank" rel="noopener noreferrer">${sourceText} ↗</a>
       </div>
 
       <div id="englishPane" class="anim-rise mt-9" style="animation-delay:.1s">
@@ -724,14 +810,38 @@ function viewFatwa(id) {
           </section>` : ''}
 
         <section class="mt-8">
-          <p class="eyebrow mb-3">Answer</p>
+          <p class="eyebrow mb-3">${isSummary ? 'Ruling' : 'Answer'}</p>
           <div class="${f.translated ? 'prose-fatwa' : 'ur-text'}" ${f.translated ? '' : 'dir="rtl"'}>
             ${f.translated ? renderProse(f.answer) : renderUrdu(f.answer)}
           </div>
         </section>
+
+        ${(f.references && f.references.length) ? `
+          <section class="mt-8 rounded-[var(--radius-card)] border p-6"
+                   style="border-color: var(--color-line-soft)">
+            <p class="eyebrow mb-3">Works cited in the ruling</p>
+            <ul class="space-y-1.5 text-[14px] leading-relaxed" style="color: var(--color-ink-soft)">
+              ${f.references.map(r => `<li>${wrapInlineRtl(esc(r))}</li>`).join('')}
+            </ul>
+          </section>` : ''}
+
+        ${f.signedBy ? `<p class="mt-6 text-[13.5px] italic" style="color: var(--color-muted)">
+            Signed: ${esc(f.signedBy)}
+          </p>` : ''}
+
+        ${f.scanUrl ? `
+          <p class="mt-8 rounded-[var(--radius-card)] border p-4 text-[13px] leading-relaxed"
+             style="border-color: var(--color-line-soft); color: var(--color-muted)">
+            ${isSummary ? 'This entry is a <strong>summary</strong> of the ruling, not a translation of the book\'s text.'
+              : 'This entry is <strong>unchecked</strong>.'}
+            Always compare it against
+            <a class="underline underline-offset-2" href="${esc(sourceHref)}"
+               target="_blank" rel="noopener noreferrer">the original scanned page</a>
+            (volume ${f.volume}, p.&nbsp;${f.page}) before relying on it.
+          </p>` : ''}
       </div>
 
-      <div id="urduPane" class="mt-9 hidden">
+      ${hasUrduBody ? `<div id="urduPane" class="mt-9 hidden">
         <section class="rounded-[var(--radius-card)] border p-6"
                  style="background: var(--color-sunk); border-color: var(--color-line-soft)">
           <p class="eyebrow mb-3">اصل عبارت — Original Urdu</p>
@@ -739,7 +849,7 @@ function viewFatwa(id) {
           <div class="ur-text" dir="rtl">${renderUrdu(f.urdu.question)}</div>
         </section>
         <section class="mt-6 ur-text" dir="rtl">${renderUrdu(f.urdu.answer)}</section>
-      </div>
+      </div>` : ''}
 
       <nav class="mt-14 grid gap-3 sm:grid-cols-2" aria-label="Adjacent fatawa">
         ${prev ? navCard(prev, 'Previous') : '<div></div>'}
@@ -750,7 +860,7 @@ function viewFatwa(id) {
     setTitle([f.title, `Fatwa ${f.id}`]);
 
     const urduBtn = $('#urduBtn');
-    urduBtn.addEventListener('click', () => {
+    if (urduBtn) urduBtn.addEventListener('click', () => {
       const showing = $('#urduPane').classList.toggle('hidden');
       $('#englishPane').classList.toggle('hidden', !showing);
       urduBtn.setAttribute('aria-pressed', String(!showing));
@@ -777,7 +887,7 @@ function viewFatwa(id) {
     const ix = state.index;
     const k = ix ? ix.id.indexOf(nid) : -1;
     const t = k >= 0 ? ix.t[k] : `Fatwa ${nid}`;
-    return `<a class="card !p-4 ${right ? 'sm:text-right' : ''}" href="#/fatwa/${nid}">
+    return `<a class="card !p-4 ${right ? 'sm:text-right' : ''}" href="${bookHref(`/fatwa/${nid}`)}">
       <p class="eyebrow mb-1.5">${label}</p>
       <p class="display text-[15px] leading-snug">${esc(t)}</p>
     </a>`;
@@ -799,8 +909,8 @@ function viewBrowse(volume) {
         <p class="eyebrow">The collection</p>
         <h1 class="display mt-3 text-[34px] leading-tight sm:text-[42px]">Browse by volume</h1>
         <p class="mt-3 text-[15px] leading-relaxed" style="color: var(--color-muted)">
-          ${nfmt(m.total)} rulings arranged across nine volumes, following the classical
-          order of the fiqh manuals.
+          ${nfmt(m.total)} ${m.total === 1 ? 'ruling' : 'rulings'} arranged across
+          ${esc(volumeSummary(m))}, following the classical order of the fiqh manuals.
         </p>
       </header>
 
@@ -816,7 +926,7 @@ function viewBrowse(volume) {
 
       <div class="stagger mt-9 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         ${vols.map(v => `
-          <a class="card" href="#/browse/${v.volume}">
+          <a class="card" href="${bookHref(`/browse/${v.volume}`)}">
             <p class="eyebrow">Volume ${v.volume}</p>
             <p class="display mt-2 text-[21px]">${nfmt(v.total)} fatawa</p>
             <p class="mt-2 text-[13px] leading-relaxed" style="color: var(--color-muted)">
@@ -835,7 +945,7 @@ function viewBrowse(volume) {
   main.innerHTML = `
   <div class="wrap-narrow py-12">
     <nav class="anim-fade mb-6 text-[12.5px]" style="color: var(--color-muted)">
-      <a href="#/browse" class="tap transition-colors hover:opacity-70">Browse</a>
+      <a href="${bookHref('/browse')}" class="tap transition-colors hover:opacity-70">Browse</a>
       <span class="mx-2">/</span>Volume ${v.volume}
     </nav>
     <header class="anim-rise">
@@ -866,14 +976,15 @@ function viewBrowse(volume) {
 
 
 /* ------------------------------------------------------------------ */
-const BOOKS = [
+/*  PDF library (standalone translated works)                          */
+const LIBRARY = [
   {
     slug: 'al-hilat-al-najizah',
     title: "al-\u1e24\u012blat al-N\u0101jizah li'l-\u1e24al\u012blat al-\u02bf\u0100jizah",
     subtitle: 'The Effective Stratagem for the Helpless Wife',
     author: 'Ashraf \u02bfAl\u012b Th\u0101nw\u012b',
     year: 'c. 1932',
-    pages: 430,
+    pages: 443,
     summary: `A Hanafi treatise on the dissolution of marriage \u2014 the wife of a missing
       husband (mafq\u016bd), an impotent husband, and a husband who withholds his wife's
       rights. Translated from the lithographed Urdu, with the Arabic fatwas of the
@@ -884,13 +995,13 @@ const BOOKS = [
 ];
 
 function viewBooks(slug) {
-  const book = slug ? BOOKS.find(b => b.slug === slug) : null;
-  if (slug && !book) {
+  const vol = slug ? LIBRARY.find(b => b.slug === slug) : null;
+  if (slug && !vol) {
     main.innerHTML = `<div class="wrap">${emptyState('Book not found',
       'That title is not in the library.')}</div>`;
     return;
   }
-  if (book) return viewBookReader(book);
+  if (vol) return viewBookReader(vol);
 
   main.innerHTML = `
   <div class="wrap-narrow py-14">
@@ -903,7 +1014,7 @@ function viewBooks(slug) {
     </header>
 
     <div class="anim-rise mt-10 space-y-5" style="animation-delay:.06s">
-      ${BOOKS.map(b => `
+      ${LIBRARY.map(b => `
         <article class="card !p-6">
           <p class="eyebrow">${esc(b.author)} \u00b7 ${esc(b.year)}</p>
           <h2 class="display mt-2 text-[21px] leading-snug">
@@ -961,6 +1072,7 @@ function viewBookReader(b) {
 
 function viewAbout() {
   const m = state.meta;
+  if (state.book === 'mahmudiyyah') return viewAboutMahmudiyyah(m);
   main.innerHTML = `
   <div class="wrap-narrow py-14">
     <header class="anim-rise">
@@ -1024,12 +1136,73 @@ function viewAbout() {
   </div>`;
 }
 
-const SITE_NAME = 'Fatawa Darul Uloom Zakariyya — English Edition';
+function viewAboutMahmudiyyah(m) {
+  const b = (m.book || {});
+  main.innerHTML = `
+  <div class="wrap-narrow py-14">
+    <header class="anim-rise">
+      <p class="eyebrow">About</p>
+      <h1 class="display mt-3 text-[34px] leading-tight sm:text-[42px]">
+        About this section
+      </h1>
+    </header>
 
+    <div class="anim-rise mt-8 space-y-5 text-[16px] leading-[1.75]"
+         style="color: var(--color-ink-soft); animation-delay:.06s">
+      <p>
+        <em>${esc(b.title || 'Fatawa Mahmudiyyah')}</em>
+        (<span class="ar-inline" dir="rtl">${esc(b.urduTitle || '')}</span>) collects the
+        rulings of ${esc(b.author || '')}, compiled by ${esc(b.compiler || '')} and published
+        by ${esc(b.publisher || '')}. It runs to thirty-one volumes in Urdu.
+      </p>
+
+      <h2 class="display pt-3 text-[21px]" style="color: var(--color-ink)">These entries are summaries</h2>
+      <p>
+        This section does <strong>not</strong> reproduce the book in English. Each entry is a
+        summary, written from the scanned Urdu, of what a questioner asked and what the muftī
+        ruled, together with the works the ruling cites.
+      </p>
+      <p>
+        Every entry links directly to the scanned page it summarises, so the original can
+        always be read alongside it. Where a summary and the scan differ, the scan governs.
+      </p>
+
+      <h2 class="display pt-3 text-[21px]" style="color: var(--color-ink)">How the pages were read</h2>
+      <p>
+        The Urdu here is set in Nastaʿlīq, which defeats the automatic text layer supplied with
+        the scans, so the pages were read directly as images rather than from OCR. Volume 1 is
+        entirely front matter; the rulings begin in volume 2 with
+        <em>Kitāb al-Īmān wa'l-ʿAqāʾid</em>.
+      </p>
+
+      <h2 class="display pt-3 text-[21px]" style="color: var(--color-ink)">Please read this carefully</h2>
+      <p>
+        These summaries are AI-generated and have <strong>not been checked by a scholar</strong>.
+        Summarising a legal ruling necessarily drops qualifications and detail, and may
+        misrepresent it. Nothing here may be quoted, cited, published or forwarded as an
+        authority.
+      </p>
+      <p>
+        A fatwa answers the question of the person who asked it, in their circumstances. For a
+        ruling on your own situation, consult a qualified muftī.
+      </p>
+
+      <div class="rule my-4"></div>
+      <p class="text-[14px]" style="color: var(--color-muted)">
+        Scans: <a href="${esc(book().sourceUrl)}" target="_blank" rel="noopener noreferrer"
+        class="underline underline-offset-2" style="color: var(--color-accent)">archive.org</a>.
+        Currently summarising ${nfmt(m.total)} ${m.total === 1 ? 'ruling' : 'rulings'}.
+      </p>
+    </div>
+  </div>`;
+}
+
+const SITE_NAME = 'Fatawa Darul Uloom Zakariyya — English Edition';
 /** Give every route a distinct, meaningful document title. */
 function setTitle(parts) {
   const bits = (Array.isArray(parts) ? parts : [parts]).filter(Boolean);
-  document.title = bits.length ? `${bits.join(' · ')} — ${SITE_NAME}` : SITE_NAME;
+  const site = state.book === DEFAULT_BOOK ? SITE_NAME : `${book().title} — English Edition`;
+  document.title = bits.length ? `${bits.join(' · ')} — ${site}` : site;
 }
 
 /* ------------------------------------------------------------------ */
@@ -1057,10 +1230,54 @@ function syncHeader(route) {
   const hide = route.name === 'home' || route.name === 'search';
   hs.classList.toggle('hidden', hide);
   hs.classList.toggle('flex', !hide);
+
+  // Section links stay inside whichever collection is open.
   document.querySelectorAll('[data-nav]').forEach(a => {
     const on = a.dataset.nav === route.name;
     a.style.color = on ? 'var(--color-ink)' : 'var(--color-muted)';
+    a.href = bookHref('/' + a.dataset.nav);
   });
+  document.querySelectorAll('[data-home]').forEach(a => { a.href = bookHref('/'); });
+
+  // Collection tabs.
+  document.querySelectorAll('[data-book]').forEach(a => {
+    const on = a.dataset.book === state.book;
+    a.href = bookHref('/', a.dataset.book);
+    a.classList.toggle('book-tab-on', on);
+    a.setAttribute('aria-current', on ? 'page' : 'false');
+  });
+
+  // Brand wordmark follows the active collection.
+  const bt = $('#brandTitleFull');
+  const bs = $('#brandTitleShort');
+  if (bt) bt.textContent = book().title;
+  if (bs) bs.textContent = book().short;
+
+  const src = $('#footerSource');
+  if (src) { src.href = book().sourceUrl; src.textContent = 'Original ↗'; }
+
+  const ft = $('#footerTitle');
+  const fs = $('#footerSub');
+  if (ft) ft.textContent = book().title;
+  if (fs) fs.textContent = state.book === 'mahmudiyyah'
+    ? 'English summaries · from the scanned Urdu'
+    : 'English edition · translated from the original Urdu';
+
+  const disc = $('#disclaimerBody');
+  if (disc) {
+    disc.innerHTML = state.book === 'mahmudiyyah'
+      ? `This site is for the internal use of a small group of students only. These entries are
+         AI-written <strong>summaries</strong> of each ruling — not translations of the book —
+         and have <strong>not been checked by a scholar</strong>. It is not acceptable to quote,
+         cite or forward them as a source. Always read
+         <a href="${book().sourceUrl}" target="_blank" rel="noopener noreferrer">the original scans</a>.`
+      : `This site is for the internal use of a small group of students only. The English was
+         translated by Claude Opus 5 (1M context, maximum reasoning effort) and has
+         <strong>not been checked by a scholar</strong>. It is not acceptable to quote, cite or
+         forward it as a source. For the authoritative text, always refer to
+         <a href="https://fduz.org" target="_blank" rel="noopener noreferrer">fduz.org</a>.`;
+  }
+
   const input = $('#headerSearchInput');
   if (input) input.value = route.name === 'search' ? (route.params.q || '') : '';
 }

@@ -1,5 +1,7 @@
 # Fatawa Darul Uloom Zakariyya — English Edition
 
+**Live: https://fatawa-english.netlify.app**
+
 A minimal, search-first English edition of the nine-volume Urdu fatwa collection
 published by Darul Uloom Zakariyya ([fduz.org](https://fduz.org)).
 
@@ -141,7 +143,69 @@ Ids are global and sequential, 1–3742.
 
 ---
 
-## A note on use
+## Fatawa Mahmudiyyah (second collection)
+
+A second collection is served from the same app under the `#/mahmudiyyah` route
+prefix. It shares every view, style and search behaviour with the Zakariyya
+edition — only the data directory differs (`public/data/mahmudiyyah/`).
+
+```bash
+npm run data:mahmudiyyah    # build just this collection
+npx playwright test tests/mahmudiyyah.spec.js
+```
+
+Entries live in `data/mahmudiyyah/source.json` and are keyed by `id`:
+
+| field | meaning |
+| --- | --- |
+| `volume`, `page` | printed volume and page number |
+| `pdfPage` | 1-based page in the archive.org PDF (used to build the scan link) |
+| `chapter` | Arabic kitāb heading; drives the topic taxonomy |
+| `title`, `question`, `answer` | the English entry |
+| `references` | works the ruling cites |
+| `signedBy` | the signature line |
+| `mode` | `summary` (default) or `full` |
+
+### Current status: summaries, not translations
+
+The entries presently shipped are **summaries** — what the questioner asked and
+what the muftī ruled, plus the works cited — each deep-linked to the exact
+scanned page. They are not renderings of the book's own prose.
+
+Two reasons, and the second is the binding one:
+
+1. The work is in copyright (Maktaba Mahmoodia). Summarising a ruling conveys
+   its substance; reproducing the book in English is a different act.
+2. **There is no usable text layer.** archive.org's OCR for this Nastaʿlīq is
+   noise, and the PDFs carry a legacy non-Unicode font dump rather than
+   recoverable Urdu (`pdftotext` yields `]Ìz] Z f Å\¬vZ`). Pages must therefore
+   be read as images. That is dependable for substance but *not* dependable at
+   word level — and in fiqh the qualifiers carry the ruling, so a dropped
+   condition or a flipped negation silently inverts the verdict. Machine-read
+   word-for-word text is not safe to publish as a muftī's ruling.
+
+For scale: vol. 3 alone is 457 pages; the set runs past 14,000.
+
+### Adding full translations
+
+The pipeline already supports them. Add to an entry:
+
+```jsonc
+{
+  "mode": "full",
+  "question": "…English…",
+  "answer":   "…English…",
+  "urduQuestion": "…original Urdu…",
+  "urduAnswer":   "…original Urdu…"
+}
+```
+
+`mode` is inferred as `full` whenever Urdu text is present. Such entries render
+in the same layout as the Zakariyya records, Urdu toggle included, and the
+summary notice disappears — no code changes required. Text should come from a
+human translator working against the scans, ideally scholar-checked.
+
+
 
 A translation is not a substitute for the original, and a fatwa answers the question of
 the person who asked it, in their circumstances. For a ruling on your own situation,

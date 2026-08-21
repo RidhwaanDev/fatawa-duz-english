@@ -1,0 +1,91 @@
+{
+  "book": {
+    "slug": "mahmudiyyah",
+    "title": "Fatawa Mahmudiyyah",
+    "urduTitle": "فتاویٰ محمودیہ",
+    "author": "Mufti Mahmood Hasan Gangohi",
+    "authorUrdu": "مفتی محمود حسن گنگوہی",
+    "compiler": "Mufti Muhammad Farooq Meerathi",
+    "publisher": "Maktaba Mahmoodia",
+    "archiveId": "Fatawa-Mahmoodia",
+    "note": "Entries are summaries of each ruling, not translations of the book's text. Each links to the original scanned page."
+  },
+  "entries": [
+    {
+      "id": 1,
+      "volume": 2,
+      "page": 29,
+      "pdfPage": 31,
+      "chapter": "كتاب الإيمان والعقائد",
+      "section": "اسلام اور ایمان",
+      "urduTitle": "قرآن پر ایمان کا مطلب",
+      "title": "What belief in the Qur'an requires",
+      "question": "If a person believes in the Qur'an, what is the ruling on denying the Qur'an — either in its entirety or in part — whether that denial is made with the tongue or shows itself through one's limbs, that is, in one's conduct?",
+      "answer": "The ruling turns on a distinction between belief and conduct.\n\nAffirming the whole of the Qur'an is a requirement of faith. If a person holds the belief that the Qur'an, or even a single verse of it, was not revealed by Allah, faith does not remain.\n\nA shortcoming that lies only in action is judged differently. Failing to act on the Qur'an is not itself ruled disbelief. Faith is weakened and diminished by such failure, but it does not come to an end so long as the affirmation of the heart remains intact.",
+      "references": [
+        "Sharḥ Fiqh al-Akbar, p. 205 (Kutub Khana Rahimiyya, Deoband)",
+        "Sharḥ Fiqh al-Akbar, p. 106"
+      ],
+      "signedBy": "Mahmūd, Dār al-ʿUlūm Deoband",
+      "mode": "summary"
+    },
+    {
+      "id": 2,
+      "volume": 2,
+      "page": 29,
+      "pdfPage": 31,
+      "chapter": "كتاب الإيمان والعقائد",
+      "section": "اسلام اور ایمان",
+      "urduTitle": "صرف کلمہ پڑھنے سے دخول جنت",
+      "title": "Whether reciting the kalimah at death alone secures Paradise",
+      "question": "Zayd claims that Muslims who sin openly, who commit transgression and immorality, who pray only occasionally and keep only a few fasts in Ramadan, who listen to admonition yet stay heedless of the rights owed to other people, and who do not hand over the inheritance shares due to others, will nevertheless go straight to Paradise without any punishment provided they recite the kalimah at the time of death — his reasoning being that receiving the kalimah wipes out every sin and brings a person into Paradise at once. Is this correct?",
+      "answer": "Stated as a blanket rule, Zayd's claim is not correct; accepting it would mean setting aside a great many texts.\n\nIt holds only in a restricted case: someone who came to faith and then committed no sin afterwards. For such a person the claim is sound.\n\nThe general principle is set by the Qur'an: whoever does an atom's weight of good will see it, and whoever does an atom's weight of evil will see it (al-Zalzalah 7–8). Where a person has incurred obligations — both rights owed to Allah and rights owed to other people — simply reciting the kalimah as he dies does not cancel them. Zayd is required to repent of this statement, since it runs against the Qur'an, the hadith, and the consensus of the ummah.\n\nWhat is established is narrower: that a person whose life ends upon faith has the promise of Paradise. It is not established anywhere that every such person enters immediately and without reckoning. The outcomes differ — some enter without reckoning, some only after their punishment has been completed, some through intercession, some are brought out of the Fire by the permission of the Prophet ﷺ, and some Allah brings out Himself. All of these, however, are people whose end came upon faith.",
+      "references": [
+        "Sūrah al-Zalzalah 7–8",
+        "Tafsīr Maẓharī 10/325 (Rashīdiyya, Quetta)",
+        "Mishkāt al-Maṣābīḥ, p. 140, Bāb mā yuqāl ʿind man ḥaḍarahu al-mawt",
+        "Sunan Abī Dāwūd 2/443, Kitāb al-Janāʾiz, Bāb fī al-talqīn",
+        "Ṣaḥīḥ al-Bukhārī 2/1107–1108, Kitāb al-Tawḥīd, ḥadīth 7139–7140"
+      ],
+      "signedBy": "Mahmūd, Dār al-ʿUlūm Deoband — countersigned by Niẓām al-Dīn",
+      "mode": "summary"
+    },
+    {
+      "id": 3,
+      "volume": 2,
+      "page": 31,
+      "pdfPage": 33,
+      "chapter": "كتاب الإيمان والعقائد",
+      "section": "اسلام اور ایمان",
+      "urduTitle": "کیا محض ایمان پر جنت کی بشارت ہے",
+      "title": "Whether the glad tiding of Paradise attaches to faith alone",
+      "question": "Regarding the verse that speaks of those who believe and do righteous deeds, a scholar stated that the position of most exegetes is that a believer who has no righteous deeds — no prayer, no fasting and so on — is also entitled to this glad tiding, his argument being that a thing is not conjoined to itself, so the mention of deeds alongside faith must indicate two separate things. How sound is that?",
+      "answer": "A distinction has to be drawn between two cases.\n\nIf a person accepts faith and dies straight away, so that the occasion for righteous deeds never arose, then he is included in this glad tiding under the law of Allah, on the basis of being upon the true religion.\n\nIf a person had time available after accepting faith but performed no righteous deeds and instead remained caught up in sins, entry is not denied him as a matter of law — but he becomes deserving of Paradise only after punishment.\n\nThe scholar's own argument in fact tells against his conclusion. What it establishes is that faith and righteous deeds are two distinct things; and if they are distinct, then the glad tiding attaches to the two of them combined, not to faith on its own. Presenting that argument as proof that a bare believer is entitled to the glad tiding is therefore mistaken.",
+      "references": [
+        "Mirqāt al-Mafātīḥ 1/94, Kitāb al-Īmān (Aṣaḥḥ al-Maṭābiʿ, Bombay)"
+      ],
+      "signedBy": "Mahmūd Gangohī, assistant mufti, Madrasa Maẓāhir ʿUlūm, Saharanpur",
+      "mode": "summary"
+    },
+    {
+      "id": 4,
+      "volume": 2,
+      "page": 32,
+      "pdfPage": 34,
+      "chapter": "كتاب الإيمان والعقائد",
+      "section": "اسلام اور ایمان",
+      "urduTitle": "احکام پر عمل کرنا اعلیٰ درجہ کے مسلمانوں کا کام ہے",
+      "title": "The claim that religious duties are only for 'higher-grade' Muslims",
+      "question": "Some Muslims say that not praying, not giving zakat, not fasting, lying, watching films and taking bribes make no difference to an ordinary Muslim; that these are matters for first-rank Muslims and there is no need for people like themselves to observe them, since they are only ordinary Muslims; and that as Allah is Most Forgiving and Most Merciful they are fully confident He will forgive them and they will certainly enter Paradise. Is this correct, and what is the ruling concerning those who say it?",
+      "answer": "Allah is indeed Most Forgiving and Most Merciful — but He is also Ever-Dominant and the Avenger. He made Paradise, and He made Hell as well. He sent down the commands, and it is to those who obey them that He has promised Paradise.\n\nTo accept some of Allah's attributes while refusing to accept others is not faith at all. Abstaining from what He has forbidden is obligatory.\n\nThose who imagine that the commands are meant only for first-rank Muslims, and that they themselves are merely ordinary Muslims, ought to follow their own reasoning through: perhaps Paradise too is only for first-rank Muslims, and Hell is what awaits those who do not act.\n\nSuch a belief and such conduct must therefore be avoided completely. Otherwise faith and Islam themselves gradually disappear altogether.",
+      "references": [
+        "Sūrah Āl ʿImrān 129",
+        "Sūrah al-Zumar 62",
+        "Sūrah Āl ʿImrān 133",
+        "Fatāwā ʿĀlamgīriyya 2/258, al-Bāb al-tāsiʿ fī aḥkām al-murtaddīn"
+      ],
+      "signedBy": "Mahmūd, Dār al-ʿUlūm Deoband",
+      "mode": "summary"
+    }
+  ]
+}
