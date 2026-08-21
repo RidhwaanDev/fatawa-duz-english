@@ -873,11 +873,12 @@ const BOOKS = [
     subtitle: 'The Effective Stratagem for the Helpless Wife',
     author: 'Ashraf \u02bfAl\u012b Th\u0101nw\u012b',
     year: 'c. 1932',
-    pages: 377,
+    pages: 430,
     summary: `A Hanafi treatise on the dissolution of marriage \u2014 the wife of a missing
       husband (mafq\u016bd), an impotent husband, and a husband who withholds his wife's
       rights. Translated from the lithographed Urdu, with the Arabic fatwas of the
-      Maliki jurists reproduced as facsimiles of the original.`,
+      Maliki jurists reproduced as facsimiles of the original. Companion
+      treatises by other hands are not included.`,
     file: './books/al-hilat-al-najizah.pdf',
   },
 ];
