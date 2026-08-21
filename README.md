@@ -24,6 +24,60 @@ runtime dependencies. Everything is static and can be served from any file host.
 
 ---
 
+## Collections
+
+The site hosts several collections behind one shell. `BOOKS` in `public/app.js`
+is the registry; a leading hash prefix selects one and the default collection has
+an empty prefix, so the original URLs keep working.
+
+| Collection | Prefix | Source | Builder |
+|---|---|---|---|
+| Fatawa Darul Uloom Zakariyya | *(none)* | `data/raw/` + `data/en/` | `scripts/build_site.py` |
+| Fatawa Mahmudiyyah | `#/mahmudiyyah` | `data/mahmudiyyah/source.json` | `scripts/build_mahmudiyyah.py` |
+| Student Fatawa 🔒 | `#/students` | `data/students/source.json` | `scripts/build_students.py` |
+
+### Student Fatawa (passphrase-gated)
+
+Answers written by students of the iftāʾ course. The collection is gated in the
+browser with a shared passphrase (`hidayah4tamarin`, set on the `students` entry
+in the `BOOKS` registry).
+
+> **The gate is a courtesy lock, not access control.** The check runs in the
+> browser and `public/data/students/*` is still served publicly to anyone who
+> knows the URL. Do not put anything genuinely confidential in this collection.
+
+To add answers, append objects to `entries` in `data/students/source.json` and
+rebuild:
+
+```bash
+python3 scripts/build_students.py
+```
+
+Only `title`, `question` and `answer` are required:
+
+```json
+{
+  "title": "Praying with shoes on in the mosque",
+  "category": "prayer",
+  "group": 1,
+  "author": "Name",
+  "date": "1447",
+  "question": "Is it permissible to …",
+  "answer": "It is permissible in principle …\n\nنعم\n\nThe permission is …",
+  "references": ["Radd al-Muḥtār 1/451"]
+}
+```
+
+- `category` accepts a slug or display name; unknown values fall back to `misc`.
+  The vocabulary is shared with the other collections so all three filter alike.
+- `group` buckets answers into sets (year, term, cohort). Defaults to `1`.
+- `id` is assigned in source order if omitted.
+- Arabic inside `answer` is detected and rendered right-to-left automatically —
+  paste it as-is, exactly as with the other collections.
+- Blank lines separate paragraphs.
+
+---
+
 ## Running it
 
 ```bash
@@ -166,25 +220,23 @@ Entries live in `data/mahmudiyyah/source.json` and are keyed by `id`:
 | `signedBy` | the signature line |
 | `mode` | `summary` (default) or `full` |
 
-### Current status: summaries, not translations
+### Current status
 
-The entries presently shipped are **summaries** — what the questioner asked and
-what the muftī ruled, plus the works cited — each deep-linked to the exact
-scanned page. They are not renderings of the book's own prose.
+Entries are English translations made from the scanned pages, published by
+permission of the rights holder, each deep-linked to the page it renders.
 
-Two reasons, and the second is the binding one:
+Two things to know about the source:
 
-1. The work is in copyright (Maktaba Mahmoodia). Summarising a ruling conveys
-   its substance; reproducing the book in English is a different act.
-2. **There is no usable text layer.** archive.org's OCR for this Nastaʿlīq is
+1. **There is no usable text layer.** archive.org's OCR for this Nastaʿlīq is
    noise, and the PDFs carry a legacy non-Unicode font dump rather than
-   recoverable Urdu (`pdftotext` yields `]Ìz] Z f Å\¬vZ`). Pages must therefore
-   be read as images. That is dependable for substance but *not* dependable at
-   word level — and in fiqh the qualifiers carry the ruling, so a dropped
-   condition or a flipped negation silently inverts the verdict. Machine-read
-   word-for-word text is not safe to publish as a muftī's ruling.
-
-For scale: vol. 3 alone is 457 pages; the set runs past 14,000.
+   recoverable Urdu (`pdftotext` yields `]Ìz] Z f Å\¬vZ`). Pages are read as
+   images. Comprehension is reliable; *word-level* fidelity is single-pass with
+   no second signal to check against, so entries ship labelled unchecked and
+   every one links to its scan. In fiqh the qualifiers carry the ruling, so
+   spot-checking against the page matters before anything is relied on.
+2. **Scale.** Vol. 3 alone is 457 pages; the set runs past 14,000. Translating
+   the collection end to end is a sustained human-reviewed project, not a
+   single automated pass.
 
 ### Adding full translations
 

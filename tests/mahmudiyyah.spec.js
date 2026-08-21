@@ -34,7 +34,7 @@ test.describe('mahmudiyyah collection', () => {
     await page.goto('/#/mahmudiyyah');
 
     await expect(page.locator('#main')).toContainText('Volume 2');
-    await expect(page.locator('#main')).toContainText('4 rulings');
+    await expect(page.locator('#main')).toContainText('5 rulings');
     // The Zakariyya total must never leak into this collection.
     await expect(page.locator('#main')).not.toContainText('3,742');
     expect(errors).toEqual([]);
@@ -47,13 +47,13 @@ test.describe('mahmudiyyah collection', () => {
 
     await expect(page.locator('#main h1')).toContainText('kalimah');
     await expect(page.locator('#main')).toContainText('Question');
-    await expect(page.locator('#main')).toContainText('Ruling');
+    await expect(page.locator('#main')).toContainText('Answer');
 
     // Provenance blocks specific to this collection.
     await expect(page.locator('#main')).toContainText('Works cited in the ruling');
     await expect(page.locator('#main')).toContainText('al-Zalzalah');
     await expect(page.locator('#main')).toContainText('Signed:');
-    await expect(page.locator('#main')).toContainText('is a summary');
+    await expect(page.locator('#main')).toContainText('unchecked by a scholar');
 
     const scan = page.locator('#main a', { hasText: 'the original scanned page' }).first();
     await expect(scan).toHaveAttribute('href', /archive\.org.*Vol-02.*page\/n/);
@@ -94,25 +94,25 @@ test.describe('mahmudiyyah collection', () => {
     guard(page, errors);
 
     await page.goto('/#/mahmudiyyah');
-    await expect(page.locator('#main')).toContainText('4 rulings');
+    await expect(page.locator('#main')).toContainText('5 rulings');
 
     await page.goto('/#/');
     await expect(page.locator('#main')).toContainText('3,742');
     await expect(page.getByRole('heading', { level: 1 })).toContainText('Fatawa Darul Uloom');
 
     await page.goto('/#/mahmudiyyah');
-    await expect(page.locator('#main')).toContainText('4 rulings');
+    await expect(page.locator('#main')).toContainText('5 rulings');
     expect(errors).toEqual([]);
   });
 
-  test('the disclaimer and about page describe summaries, not translation', async ({ page }) => {
+  test('the disclaimer and about page flag the translations as unchecked', async ({ page }) => {
     const errors = [];
     guard(page, errors);
 
     await page.goto('/#/mahmudiyyah/about');
     await expect(page.locator('#main')).toContainText('About this section');
-    await expect(page.locator('#main')).toContainText('does not reproduce the book in English');
-    await expect(page.locator('.disclaimer')).toContainText('summaries');
+    await expect(page.locator('#main')).toContainText('the scan governs');
+    await expect(page.locator('.disclaimer')).toContainText('not been checked by a scholar');
 
     // The default collection keeps its own wording.
     await page.goto('/#/about');
@@ -125,7 +125,7 @@ test.describe('mahmudiyyah collection', () => {
     guard(page, errors);
     const seen = new Set();
 
-    for (const id of [1, 2, 3, 4]) {
+    for (const id of [1, 2, 3, 4, 5]) {
       await page.goto(`/#/mahmudiyyah/fatwa/${id}`);
       await expect(page.locator('#main h1')).toBeVisible();
       const href = await page.locator('#main a', { hasText: 'the original scanned page' })

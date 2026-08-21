@@ -6,7 +6,7 @@
   "scripts": {
     "css": "tailwindcss -i ./src/input.css -o ./public/styles.css --minify",
     "watch": "tailwindcss -i ./src/input.css -o ./public/styles.css --watch",
-    "data": "python3 scripts/build_site.py",
+    "data": "python3 scripts/build_site.py && python3 scripts/build_mahmudiyyah.py && python3 scripts/build_students.py",
     "data:mahmudiyyah": "python3 scripts/build_mahmudiyyah.py",
     "build": "npm run data && npm run data:mahmudiyyah && npm run css",
     "serve": "python3 -m http.server 4173 --directory public"

@@ -1,0 +1,40 @@
+{
+  "collection": {
+    "slug": "students",
+    "title": "Student Fatawa",
+    "subtitle": "Training answers from the iftāʾ course",
+    "note": "Written by students as coursework. These are exercises, not issued fatawa, and have not been checked or approved by a muftī."
+  },
+
+  "_schema": {
+    "_comment": "Delete this block whenever you like — the builder ignores keys starting with an underscore. Every field except title/question/answer is optional.",
+    "id": "integer, optional. Assigned automatically in source order if omitted.",
+    "title": "string, required. A short descriptive English title, sentence case, no trailing colon.",
+    "question": "string, required. The question as asked. Blank lines separate paragraphs.",
+    "answer": "string, required. The student's answer. Arabic citations are kept verbatim and render right-to-left automatically.",
+    "category": "string, optional. A slug or display name: faith, purification, prayer, funerals, zakat, fasting, hajj, marriage, divorce, inheritance, trade, hire, partnership, property, gifts, waqf, oaths, slaughter, animals, dress, manners, leisure, lawful, hudud, politics, quran, hadith, tasawwuf, medical, finance, misc. Anything unrecognised falls back to misc.",
+    "group": "integer, optional. Groups answers into sets shown as 'Year 1', 'Year 2' etc. Defaults to 1.",
+    "author": "string, optional. Who wrote the answer.",
+    "reviewedBy": "string, optional. Who checked or corrected it.",
+    "date": "string, optional. Free text, e.g. 'Rajab 1447' or 'March 2026'.",
+    "references": "array of strings, optional. Works cited, one per entry.",
+    "section": "string, optional. A sub-heading shown under the title."
+  },
+
+  "entries": [
+    {
+      "id": 1,
+      "title": "Praying with shoes on in the mosque",
+      "category": "prayer",
+      "group": 1,
+      "author": "Sample entry — replace with real answers",
+      "date": "1447",
+      "question": "Is it permissible to perform ṣalāh while wearing shoes inside the mosque, given that the Prophet ﷺ is reported to have prayed in his sandals?",
+      "answer": "It is permissible in principle, and the report is authentic. Anas (may Allah be pleased with him) was asked whether the Prophet ﷺ prayed in his sandals, and he answered:\n\nنعم\n\nThe permission is, however, tied to the shoes being clean. Where a mosque is carpeted and shoes carry dirt in from the street, praying in them soils what has been endowed for prayer — so it is avoided, not because the act is unlawful in itself, but because of the harm attached to it here.\n\nThe practical position is therefore that someone certain his soles are clean may pray in them; otherwise he should not.\n\nواللہ اعلم بالصواب",
+      "references": [
+        "Ṣaḥīḥ al-Bukhārī, Kitāb al-Ṣalāh, bāb al-ṣalāh fī al-niʿāl",
+        "Radd al-Muḥtār 1/451"
+      ]
+    }
+  ]
+}

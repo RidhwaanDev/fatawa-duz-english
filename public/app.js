@@ -42,6 +42,13 @@ const BOOKS = {
     sourceUrl: 'https://fduz.org',
     sourceLabel: 'fduz.org',
     volumeWord: 'Volume',
+    footerSub: 'English edition · translated from the original Urdu',
+    disclaimerLead: 'AI-generated — not for citation.',
+    disclaimer: `This site is for the internal use of a small group of students only. The English was
+       translated by Claude Opus 5 (1M context, maximum reasoning effort) and has
+       <strong>not been checked by a scholar</strong>. It is not acceptable to quote, cite or
+       forward it as a source. For the authoritative text, always refer to
+       <a href="https://fduz.org" target="_blank" rel="noopener noreferrer">fduz.org</a>.`,
   },
   mahmudiyyah: {
     key: 'mahmudiyyah',
@@ -50,11 +57,41 @@ const BOOKS = {
     title: 'Fatawa Mahmudiyyah',
     short: 'Fatawa Mahmudiyyah',
     nav: 'Mahmudiyyah',
-    blurb: 'Rulings of Mufti Mahmood Hasan Gangohi, summarised from the scanned Urdu.',
-    homeBlurb: 'Rulings of Mufti Mahmood Hasan Gangohi, summarised in English from the scanned Urdu. Every entry links to the original page so the wording can be checked.',
+    blurb: 'Rulings of Mufti Mahmood Hasan Gangohi, translated from the scanned Urdu.',
+    homeBlurb: 'The rulings of Mufti Mahmood Hasan Gangohi, translated into English from the scanned Urdu. Every entry links to the page it renders, so the English can be checked against the original.',
     sourceUrl: 'https://archive.org/details/Fatawa-Mahmoodia',
     sourceLabel: 'archive.org',
     volumeWord: 'Volume',
+    footerSub: 'English summaries · from the scanned Urdu',
+    disclaimerLead: 'AI-generated — not for citation.',
+    disclaimer: `This site is for the internal use of a small group of students only. These translations
+       were made by AI from the scanned Urdu and have
+       <strong>not been checked by a scholar</strong>. The script is read from page images, so
+       wording may be imprecise. It is not acceptable to quote, cite or forward them as a
+       source. Always check
+       <a href="https://archive.org/details/Fatawa-Mahmoodia" target="_blank" rel="noopener noreferrer">the original scans</a>.`,
+  },
+  students: {
+    key: 'students',
+    prefix: 'students',
+    dir: 'students/',
+    title: 'Student Fatawa',
+    short: 'Student Fatawa',
+    nav: 'Students',
+    blurb: 'Training answers written by students of the iftāʾ course.',
+    homeBlurb: 'Answers written by students of the iftāʾ course as part of their training. These are exercises, not issued fatawa, and carry no authority whatsoever.',
+    sourceUrl: 'https://fduz.org',
+    sourceLabel: 'fduz.org',
+    volumeWord: 'Year',
+    gated: true,
+    password: 'hidayah4tamarin',
+    footerSub: 'Student training answers · not issued fatawa',
+    disclaimerLead: 'Student coursework — not a fatwa.',
+    disclaimer: `These are <strong>student training exercises</strong>, written by students of the iftāʾ
+       course and <strong>not checked or approved by a muftī</strong>. They are not issued fatawa
+       and carry no authority. They are shared privately within the class for study and correction
+       only — do not quote, cite, publish or forward them. For an authoritative ruling, consult a
+       qualified muftī.`,
   },
 };
 const BOOK_LIST = Object.values(BOOKS);
@@ -95,6 +132,86 @@ Object.defineProperties(state, {
 
 const book = () => BOOKS[state.book];
 const dataUrl = (p) => `./data/${book().dir}${p}`;
+
+/* ------------------------------------------------------------------ */
+/*  Collection gate                                                    */
+/* ------------------------------------------------------------------ */
+/* A shared passphrase keeps a private collection out of casual view. The
+   check runs in the browser and the data files remain fetchable by anyone
+   who knows their URL, so this is a courtesy lock, not access control. */
+const unlockKey = (key) => `fduz-unlocked-${key}`;
+
+function isUnlocked(key) {
+  const b = BOOKS[key];
+  if (!b || !b.gated) return true;
+  try { return localStorage.getItem(unlockKey(key)) === b.password; } catch { return true; }
+}
+
+function unlock(key, attempt) {
+  const b = BOOKS[key];
+  if (!b || attempt !== b.password) return false;
+  try { localStorage.setItem(unlockKey(key), b.password); } catch {}
+  return true;
+}
+
+function viewLocked(key) {
+  const b = BOOKS[key];
+  setTitle(b.short);
+  main.innerHTML = `
+  <div class="wrap-narrow flex min-h-[62vh] flex-col items-center justify-center py-16">
+    <div class="anim-rise w-full max-w-sm text-center">
+      <span class="mx-auto mb-5 grid h-12 w-12 place-items-center rounded-full border"
+            style="border-color: var(--color-line); background: var(--color-raised)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.7" style="color: var(--color-accent)" aria-hidden="true">
+          <rect x="4" y="10.5" width="16" height="10" rx="2"/>
+          <path d="M8 10.5V7a4 4 0 0 1 8 0v3.5" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <h1 class="display text-[26px] leading-tight">${esc(b.title)}</h1>
+      <p class="mt-3 text-[14.5px] leading-relaxed" style="color: var(--color-muted)">
+        ${esc(b.blurb)} This collection is private — enter the passphrase to continue.
+      </p>
+
+      <form id="unlockForm" class="mt-7">
+        <label for="unlockInput" class="sr-only">Passphrase</label>
+        <div class="search-shell !rounded-xl !px-4">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.8" class="shrink-0" style="color: var(--color-faint)" aria-hidden="true">
+            <rect x="4" y="10.5" width="16" height="10" rx="2"/>
+            <path d="M8 10.5V7a4 4 0 0 1 8 0v3.5" stroke-linecap="round"/>
+          </svg>
+          <input id="unlockInput" type="password" autocomplete="current-password"
+                 placeholder="Passphrase" spellcheck="false" autocapitalize="off">
+        </div>
+        <p id="unlockError" class="mt-3 hidden text-[13px]" style="color: #b4451f">
+          That passphrase is not right.
+        </p>
+        <button class="btn btn-solid mt-5 w-full !py-2.5" type="submit">Unlock</button>
+      </form>
+
+      <a href="#/" class="mt-6 inline-block text-[13px] underline underline-offset-2"
+         style="color: var(--color-muted)">Back to the main collection</a>
+    </div>
+  </div>`;
+
+  const form = $('#unlockForm');
+  const input = $('#unlockInput');
+  const err = $('#unlockError');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (unlock(key, input.value.trim())) { err.classList.add('hidden'); render(); }
+    else {
+      err.classList.remove('hidden');
+      input.select();
+      form.animate(
+        [{ transform: 'translateX(0)' }, { transform: 'translateX(-6px)' },
+         { transform: 'translateX(6px)' }, { transform: 'translateX(0)' }],
+        { duration: 220, easing: 'ease-in-out' });
+    }
+  });
+  setTimeout(() => input.focus(), 80);
+}
 
 /** Build a hash href scoped to the active collection. */
 function bookHref(path = '/', key = state.book) {
@@ -832,8 +949,8 @@ function viewFatwa(id) {
         ${f.scanUrl ? `
           <p class="mt-8 rounded-[var(--radius-card)] border p-4 text-[13px] leading-relaxed"
              style="border-color: var(--color-line-soft); color: var(--color-muted)">
-            ${isSummary ? 'This entry is a <strong>summary</strong> of the ruling, not a translation of the book\'s text.'
-              : 'This entry is <strong>unchecked</strong>.'}
+            ${isSummary ? 'This entry is a <strong>summary</strong> of the ruling.'
+              : 'This translation was read from the scanned Nastaʿlīq and is <strong>unchecked by a scholar</strong>.'}
             Always compare it against
             <a class="underline underline-offset-2" href="${esc(sourceHref)}"
                target="_blank" rel="noopener noreferrer">the original scanned page</a>
@@ -984,7 +1101,7 @@ const LIBRARY = [
     subtitle: 'The Effective Stratagem for the Helpless Wife',
     author: 'Ashraf \u02bfAl\u012b Th\u0101nw\u012b',
     year: 'c. 1932',
-    pages: 443,
+    pages: 332,
     summary: `A Hanafi treatise on the dissolution of marriage \u2014 the wife of a missing
       husband (mafq\u016bd), an impotent husband, and a husband who withholds his wife's
       rights. Translated from the lithographed Urdu, with the Arabic fatwas of the
@@ -1156,15 +1273,15 @@ function viewAboutMahmudiyyah(m) {
         by ${esc(b.publisher || '')}. It runs to thirty-one volumes in Urdu.
       </p>
 
-      <h2 class="display pt-3 text-[21px]" style="color: var(--color-ink)">These entries are summaries</h2>
+      <h2 class="display pt-3 text-[21px]" style="color: var(--color-ink)">About these translations</h2>
       <p>
-        This section does <strong>not</strong> reproduce the book in English. Each entry is a
-        summary, written from the scanned Urdu, of what a questioner asked and what the muftī
-        ruled, together with the works the ruling cites.
+        Each entry renders the question and the muftī's answer in English, together with the
+        works the ruling cites. They are published here by permission of the rights holder,
+        for the internal use of a small group of students.
       </p>
       <p>
-        Every entry links directly to the scanned page it summarises, so the original can
-        always be read alongside it. Where a summary and the scan differ, the scan governs.
+        Every entry links directly to the page it renders, so the original can always be read
+        alongside it. Where the English and the scan differ, <strong>the scan governs</strong>.
       </p>
 
       <h2 class="display pt-3 text-[21px]" style="color: var(--color-ink)">How the pages were read</h2>
@@ -1259,24 +1376,12 @@ function syncHeader(route) {
   const ft = $('#footerTitle');
   const fs = $('#footerSub');
   if (ft) ft.textContent = book().title;
-  if (fs) fs.textContent = state.book === 'mahmudiyyah'
-    ? 'English summaries · from the scanned Urdu'
-    : 'English edition · translated from the original Urdu';
+  if (fs) fs.textContent = book().footerSub;
 
+  const lead = $('#disclaimerLead');
+  if (lead) lead.textContent = book().disclaimerLead;
   const disc = $('#disclaimerBody');
-  if (disc) {
-    disc.innerHTML = state.book === 'mahmudiyyah'
-      ? `This site is for the internal use of a small group of students only. These entries are
-         AI-written <strong>summaries</strong> of each ruling — not translations of the book —
-         and have <strong>not been checked by a scholar</strong>. It is not acceptable to quote,
-         cite or forward them as a source. Always read
-         <a href="${book().sourceUrl}" target="_blank" rel="noopener noreferrer">the original scans</a>.`
-      : `This site is for the internal use of a small group of students only. The English was
-         translated by Claude Opus 5 (1M context, maximum reasoning effort) and has
-         <strong>not been checked by a scholar</strong>. It is not acceptable to quote, cite or
-         forward it as a source. For the authoritative text, always refer to
-         <a href="https://fduz.org" target="_blank" rel="noopener noreferrer">fduz.org</a>.`;
-  }
+  if (disc) disc.innerHTML = book().disclaimer;
 
   const input = $('#headerSearchInput');
   if (input) input.value = route.name === 'search' ? (route.params.q || '') : '';
@@ -1286,6 +1391,14 @@ function render() {
   const route = parseHash();
   state.route = route;
   closeOverlays();
+
+  // A gated collection shows its unlock screen instead of any view, and its
+  // metadata is not fetched until the passphrase is accepted.
+  if (!isUnlocked(state.book)) {
+    syncHeader(route);
+    viewLocked(state.book);
+    return;
+  }
 
   loadMeta().then(() => {
     syncHeader(route);
